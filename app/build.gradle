@@ -12,6 +12,7 @@ android {
         versionName "2.20"
         
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {
@@ -39,6 +40,10 @@ android {
             assets.srcDirs = ['src/main/assets']
         }
     }
+    
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
 }
 
 dependencies {
@@ -56,4 +61,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
 }

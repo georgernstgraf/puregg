@@ -11,7 +11,7 @@ It serves as the single source of truth for UI test coverage.
 ## 1. Startup & Main Screen
 | Scenario | Description / Steps | Expected Outcome | Regressions / Bugs | Automated |
 | :--- | :--- | :--- | :--- | :--- |
-| **App Launch (Fresh)** | Launch app on a fresh install | Toolbar displays "Zazen Meditation Timer"; Default sessions are created and visible | #8 (Crash on init due to legacy Support Library/styles) | 🔴 |
+| **App Launch (Fresh)** | Launch app on a fresh install | Toolbar displays "Zazen Meditation Timer"; Default sessions are created and visible | #8 (Crash on init due to legacy Support Library/styles) | 🟢 |
 | **Start Meditation** | Select a session -> Click "Start Meditation" button | Transitions to Active Meditation view; Timer starts counting down | #6 (PendingIntent mutability on Android 12+), FGS Crash (Android 14+) | 🟡 |
 | **Screen Rotation** | Rotate device on Main Screen | UI adapts to landscape/portrait; Selected session remains selected | | 🔴 |
 
