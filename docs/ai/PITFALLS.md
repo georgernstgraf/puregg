@@ -1,1 +1,1 @@
-- Android 12+ requires `PendingIntent.FLAG_IMMUTABLE` or `FLAG_MUTABLE` for all `PendingIntent` creations.
+- Android 14+ requires `FOREGROUND_SERVICE` and explicit types (e.g. `FOREGROUND_SERVICE_SPECIAL_USE`) when starting Foreground Services. Use `ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE` in `startForeground()`.
