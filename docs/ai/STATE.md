@@ -3,25 +3,19 @@
 Current status as of 2026-04-04.
 
 ## Current Focus
-Project modernization complete.
+Modernization complete. Resource conflicts persist.
 
 ## Completed (this cycle)
-- [x] APK extracted and decompiled
-- [x] Project scaffolded for source build
-- [x] Build errors and duplicate resource conflicts resolved
-- [x] AndroidX migration completed
-- [x] Updated to Android SDK 34
-- [x] Java 17 upgrade
-- [x] Updated minSdkVersion to 29
-- [x] PreferenceFragmentCompat migration
-- [x] CI/CD pipeline configured
-- [x] Unit testing foundation established
+- [x] Java 17 and minSdk 29 migration
+- [x] AndroidX migration
+- [x] Initial test framework set up
 
 ## Pending
-- None.
+- [ ] Migrate layouts to Material components (to fix `abc_*` resource linking errors)
+- [ ] Implement robust unit tests for core services
 
 ## Blockers
-- None.
+- Resource linking conflicts due to legacy decompiled resource files in `app/src/main/res/`.
 
 ## Next Session Suggestion
-N/A - Project modernization complete.
+Clean up `app/src/main/res/` to remove library-internal files (`abc_*`, `design_*`) and refactor XML layouts to use `androidx` components properly.
