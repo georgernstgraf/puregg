@@ -2,14 +2,14 @@
 - [x] #8 Startup crash
 - [x] #6 Meditation start crash (PendingIntent mutability and FGS permissions)
 - [x] Full automation of Start Meditation UI test scenario
-- [ ] #11 Background timer reliability (in progress — code changes done, needs device testing)
+- [ ] #11 Background timer reliability (in progress — explicit intent fix deployed, needs device re-test)
 
 ## Pending
 - [ ] Implement the remaining integration tests mapped out in `docs/ai/UI_TEST_PLAN.md`.
-- [ ] Device-test #11: verify gong fires reliably on long background sessions with setAlarmClock().
+- [ ] Device-test #11: re-verify gong fires reliably after explicit Intent fix on Oplus device.
 
 ## Blockers
 - None
 
 ## Next Session Suggestion
-Test #11 on device with a long meditation session (20+ min) while the app is backgrounded. If gong fires reliably, close the issue and revisit whether the screen-on warning dialog is still needed.
+Re-test #11 on the physical device. The explicit Intent fix should resolve the "Background execution not allowed" broadcast blocking. If gongs fire reliably through all sections, close the issue.

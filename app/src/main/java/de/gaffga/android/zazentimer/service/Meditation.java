@@ -171,7 +171,7 @@ public class Meditation {
         long triggerTime = this.sectionStartTime + ((section.duration - this.pauseSectionSeconds) * 1000L);
         this.currentSectionEndIntent = PendingIntent.getBroadcast(
             this.meditationService, 0,
-            new Intent(INTENT_SECTION_ENDED),
+            new Intent(INTENT_SECTION_ENDED).setClass(this.meditationService, SectionEndReceiver.class),
             PendingIntent.FLAG_IMMUTABLE
         );
         AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(triggerTime, this.currentSectionEndIntent);

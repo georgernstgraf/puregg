@@ -68,11 +68,6 @@
     <string name="desc_get_messages">Wenn automatische Benachrichtigungen abgeschaltet sind, können hier Nachrichten abgerufen werden.</string>
     <string name="desc_keep_screen_on">Schaltet den Bildschirm während der Meditation nicht aus</string>
     <string name="desc_no_server_messages">Automatisch neue Benachrichtigungen abrufen und anzeigen</string>
-    <string name="doze_keepon_cancel">Nein</string>
-    <string name="doze_keepon_ok">Ja, bitte</string>
-    <string name="doze_warning_dontshowagain">Diesen Hinweis nicht mehr anzeigen</string>
-    <string name="doze_warning_text1">Diese Android Version hält im Hintergrund laufende Anwendungen möglicherweise eigenmächtig an.\n\nDies könnte dazu führen, dass Meditationen nicht vollständig ablaufen.\n\nUm dies zu verhindern, bitte den Bildschirm während der Meditation nicht abschalten.\n\nDie App wird die Bildschirm-Helligkeit während der Meditation automatisch heruntersetzen.\n\nSoll ich den Bildschirm während der Meditation eingeschaltet lassen?</string>
-    <string name="doze_warning_title">Warnung</string>
     <string name="error_checking_for_server_messages">Fehler beim Abrufen der Nachrichten</string>
     <string name="gong_type">Gong Ton</string>
     <string name="help_sectionlist_text">Hier wird eine Sitzung bearbeitet. Es können Name und Beschreibung eingegeben werden und die Abschnitte bearbeitet werden.\n\n REIHENFOLGE\n Um die Reihenfolge zu ändern, lang auf einen Eintrag drücken, dann kann dieser an eine andere Position verschoben werden\n\n LÖSCHEN\n Ein Eintrag wird gelöscht, indem er nach rechts hinausgeschoben wird.\n\n ÄNDERN\n Um einen Abschnitt zu ändern, diesen antippen.\n\n HINZUFÜGEN\n Über den + Button können neue Abschnitte erstellt werden.</string>

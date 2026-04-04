@@ -83,11 +83,6 @@
     <string name="desc_get_messages">If automatic messages are disabled, you can check for news here.</string>
     <string name="desc_keep_screen_on">Keeps the screen on during the meditation</string>
     <string name="desc_no_server_messages">Automatically show News when App starts</string>
-    <string name="doze_keepon_cancel">No</string>
-    <string name="doze_keepon_ok">Yes, please</string>
-    <string name="doze_warning_dontshowagain">Don\'t show this message again</string>
-    <string name="doze_warning_text1">You are using an Android Version that might halt background services on its own.\n\nThis may result in Meditations not finishing.\n\nTo make sure the Meditation runs to the end, please allow the App to keep the screen on and don\'t switch off the screen while the Meditation is running.\n\nThe app will dim the screen automatically for you.\n\nShould I keep the screen on to make sure the Meditation runs to the end?</string>
-    <string name="doze_warning_title">Warning</string>
     <string name="error_checking_for_server_messages">Error fetching new messages.</string>
     <string name="gong_type">Gong Sound</string>
     <string name="help_sectionlist_text">Here you can name, describe and edit the contents of your Session.\n\n REORDERING\n To reorder the items, long press on an item and\n drag it to its new position.\n\n DELETING\n To delete an item, move it to the right.\n\n EDIT\n To edit a section, just touch it once.\n\n ADD\n To add a new section, press the + button.</string>

@@ -26,9 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.Toast;
 import de.gaffga.android.base.Settings;
 import de.gaffga.android.fragments.AboutFragment;
@@ -76,7 +74,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     public static final String PREF_KEY_BRIGHTNESS = "brightness";
     public static final String PREF_KEY_CONVERTED_BELL_INDICES = "bell_indices_converted";
     public static final String PREF_KEY_CONVERTED_FROM_DB = "pref_converted";
-    public static final String PREF_KEY_DOZE_WARNING_DONT_SHOW = "doze_warning_dontshow";
     public static final String PREF_KEY_FIRST_START = "first_start";
     public static final String PREF_KEY_KEEP_SCREEN_ON = "keep_screen_on";
     public static final String PREF_KEY_LAST_SESSION = "last_session";
@@ -315,34 +312,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void startMeditation() {
-        boolean z = this.pref.getBoolean(PREF_KEY_DOZE_WARNING_DONT_SHOW, false);
-        if (Build.VERSION.SDK_INT >= 23 && !z) {
-            View inflate = getLayoutInflater().inflate(R.layout.doze_warning, (ViewGroup) null);
-            final CheckBox checkBox = (CheckBox) inflate.findViewById(R.id.doze_warning_dontshowagain);
-            new AlertDialog.Builder(this).setTitle(R.string.doze_warning_title).setView(inflate).setCancelable(true).setPositiveButton(R.string.doze_keepon_ok, new DialogInterface.OnClickListener() { // from class: de.gaffga.android.zazentimer.ZazenTimerActivity.5
-                @Override // android.content.DialogInterface.OnClickListener
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    ZazenTimerActivity.this.pref.edit().putBoolean(ZazenTimerActivity.PREF_KEY_KEEP_SCREEN_ON, true).apply();
-                    if (checkBox.isChecked()) {
-                        ZazenTimerActivity.this.pref.edit().putBoolean(ZazenTimerActivity.PREF_KEY_DOZE_WARNING_DONT_SHOW, true).apply();
-                    }
-                    ZazenTimerActivity.this.doStartMediation();
-                }
-            }).setNegativeButton(R.string.doze_keepon_cancel, new DialogInterface.OnClickListener() { // from class: de.gaffga.android.zazentimer.ZazenTimerActivity.4
-                @Override // android.content.DialogInterface.OnClickListener
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (checkBox.isChecked()) {
-                        ZazenTimerActivity.this.pref.edit().putBoolean(ZazenTimerActivity.PREF_KEY_DOZE_WARNING_DONT_SHOW, true).apply();
-                    }
-                    ZazenTimerActivity.this.doStartMediation();
-                }
-            }).setOnCancelListener(new DialogInterface.OnCancelListener() { // from class: de.gaffga.android.zazentimer.ZazenTimerActivity.3
-                @Override // android.content.DialogInterface.OnCancelListener
-                public void onCancel(DialogInterface dialogInterface) {
-                }
-            }).create().show();
-            return;
-        }
         doStartMediation();
     }
 
