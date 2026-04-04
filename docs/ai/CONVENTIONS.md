@@ -15,3 +15,9 @@ Follow these without question. Do not deviate unless explicitly told.
 ## Testing
 - Ensure standard `lint` and `gradle build` commands pass.
 - After deleting or renaming resource files (layouts, strings, drawables, IDs in `public.xml`), always run `gradle clean` before building and testing. Incremental builds can produce stale R.class entries that cause instrumented tests to fail with incorrect resource IDs.
+- **Always verify GitHub Actions passes after every push.** Run `gh run list --limit 3` and `gh run view <id>` to check. Do not assume CI is green.
+
+## CI
+- Build command: `./gradle-7.5/bin/gradle build` (NOT `./gradlew`)
+- JDK version: 17 (AGP 7.4+ requirement)
+- Keep GitHub Actions versions up to date (`actions/checkout@v4`, `actions/setup-java@v4`) to avoid Node.js deprecation warnings.
