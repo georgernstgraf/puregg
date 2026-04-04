@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@android:style/Theme.DeviceDefault.Light.Dialog.Alert">
+    <TextView
+        android:textColor="@android:color/black"
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/doze_warning_text1"
+        android:singleLine="false"/>
+    <CheckBox
+        android:id="@+id/doze_warning_dontshowagain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/doze_warning_dontshowagain"/>
+</LinearLayout>

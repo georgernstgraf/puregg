@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="33"
+    android:versionName="2.20"
+    android:installLocation="auto"
+    package="de.gaffga.android.zazentimer">
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="24"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <supports-screens
+        android:anyDensity="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:resizeable="true"
+        android:xlargeScreens="true"/>
+    <application
+        android:theme="@style/LightZenTheme"
+        android:label="@string/app_name"
+        android:icon="@drawable/icon"
+        android:name="de.gaffga.android.zazentimer.ZazenTimerApplication"
+        android:enabled="true"
+        android:description="@string/app_description"
+        android:allowBackup="true"
+        android:fullBackupContent="true">
+        <activity
+            android:label="@string/app_name"
+            android:name="de.gaffga.android.zazentimer.ZazenTimerActivity"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <service
+            android:name="de.gaffga.android.zazentimer.service.MeditationService"
+            android:description="@string/service_description"/>
+    </application>
+</manifest>

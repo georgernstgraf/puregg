@@ -1,0 +1,22 @@
+package de.gaffga.android.zazentimer;
+
+import android.os.Handler;
+
+/* loaded from: classes.dex */
+public class RunOnConnect {
+    private final Handler handler;
+    private final Runnable runOnConnect;
+
+    public RunOnConnect(Handler handler, Runnable runnable) {
+        this.handler = handler;
+        this.runOnConnect = runnable;
+    }
+
+    public Handler getHandler() {
+        return this.handler;
+    }
+
+    public Runnable getRunOnConnect() {
+        return this.runOnConnect;
+    }
+}
