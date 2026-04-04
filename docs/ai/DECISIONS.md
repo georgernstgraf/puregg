@@ -14,3 +14,9 @@ Each entry documents WHAT was decided and WHY.
 - **Reason**: Necessary to support the project's requirements while maintaining compatibility.
 - **Considered**: Using the system-default Gradle or newer versions.
 - **Tradeoff**: Requires specific environment configuration to avoid compatibility issues.
+
+## 2026-04-04: Modernization
+- **Choice**: Migrated to AndroidX and upgraded to SDK 34.
+- **Reason**: To bring the project up to date with modern Android standards and improve dependency management.
+- **Considered**: Staying on legacy `android.support` libraries.
+- **Tradeoff**: Required significant effort to fix import mismatches, manifest issues, and duplicate resource definitions.
