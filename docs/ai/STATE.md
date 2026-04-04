@@ -3,21 +3,21 @@
 Current status as of 2026-04-04.
 
 ## Current Focus
-Wrapping up project modernization and testing.
+Project modernized to Java 17 and SDK 29; ongoing refactoring.
 
 ## Completed (this cycle)
-- [x] APK extracted and decompiled
-- [x] Project scaffolded for source build
-- [x] Build errors and duplicate resource conflicts resolved
-- [x] AndroidX migration completed
-- [x] Updated minSdkVersion to 29 (Android 10)
-- [x] Basic instrumented testing implemented
+- [x] Migrated to Java 17
+- [x] Updated minSdkVersion to 29
+- [x] PreferenceFragmentCompat migration for SettingsFragment
 
 ## Pending
-- [ ] Improve code readability (extract ZazenTimerActivity logic)
-- [ ] Modernize UI/UX (Material 3)
-- [ ] Implement unit tests for core services
-- [ ] Final CI/CD pipeline setup
+- [ ] Improve code readability: Extract logic from ZazenTimerActivity into a ViewModel.
+- [ ] Modernize UI/UX: Migrate remaining components to Material 3.
+- [ ] Implement unit tests: Currently, only a basic test exists for BellCollection; need more robust tests for DbOperations.
+- [ ] CI/CD pipeline setup: Enhance for automated test execution.
 
 ## Blockers
 - None.
+
+## Next Session Suggestion
+Begin refactoring ZazenTimerActivity logic into a ViewModel.
