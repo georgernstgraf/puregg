@@ -2,14 +2,13 @@
 - [x] #8 Startup crash
 - [x] #6 Meditation start crash (PendingIntent mutability and FGS permissions)
 - [x] Full automation of Start Meditation UI test scenario
-- [ ] #11 Background timer reliability (in progress — explicit intent fix deployed, needs device re-test)
+- [x] #11 Background timer reliability (setAlarmClock + explicit Intent + removed doze warning)
 
 ## Pending
-- [ ] Implement the remaining integration tests mapped out in `docs/ai/UI_TEST_PLAN.md`.
-- [ ] Device-test #11: re-verify gong fires reliably after explicit Intent fix on Oplus device.
+- [ ] Fix failing instrumented tests (pre-existing `navigation_bar_item_active_indicator_view` issue)
 
 ## Blockers
 - None
 
 ## Next Session Suggestion
-Re-test #11 on the physical device. The explicit Intent fix should resolve the "Background execution not allowed" broadcast blocking. If gongs fire reliably through all sections, close the issue.
+Fix the 3 failing instrumented tests — all fail on a missing `navigation_bar_item_active_indicator_view` view assertion.
