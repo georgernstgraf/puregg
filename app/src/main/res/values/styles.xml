@@ -1014,9 +1014,9 @@
         <item name="android:listChoiceIndicatorSingle">@drawable/abc_btn_radio_material</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/abc_btn_check_material</item>
         <item name="android:colorBackgroundCacheHint">@color/abc_background_cache_hint_selector_material_dark</item>
-        <item name="android:textSelectHandleLeft">@drawable/abc_text_select_handle_left_mtrl_dark</item>
-        <item name="android:textSelectHandleRight">@drawable/abc_text_select_handle_right_mtrl_dark</item>
-        <item name="android:textSelectHandle">@drawable/abc_text_select_handle_middle_mtrl_dark</item>
+        <item name="android:textSelectHandleLeft">?android:attr/textSelectHandleLeft</item>
+        <item name="android:textSelectHandleRight">?android:attr/textSelectHandleRight</item>
+        <item name="android:textSelectHandle">?android:attr/textSelectHandle</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:textColorAlertDialogListItem">@color/abc_primary_text_material_dark</item>
         <item name="android:actionModeCutDrawable">?attr/actionModeCutDrawable</item>
@@ -1058,9 +1058,9 @@
         <item name="android:listChoiceIndicatorMultiple">@drawable/abc_btn_check_material</item>
         <item name="android:textColorPrimaryInverseDisableOnly">@color/abc_primary_text_disable_only_material_dark</item>
         <item name="android:colorBackgroundCacheHint">@color/abc_background_cache_hint_selector_material_light</item>
-        <item name="android:textSelectHandleLeft">@drawable/abc_text_select_handle_left_mtrl_light</item>
-        <item name="android:textSelectHandleRight">@drawable/abc_text_select_handle_right_mtrl_light</item>
-        <item name="android:textSelectHandle">@drawable/abc_text_select_handle_middle_mtrl_light</item>
+        <item name="android:textSelectHandleLeft">?android:attr/textSelectHandleLeft</item>
+        <item name="android:textSelectHandleRight">?android:attr/textSelectHandleRight</item>
+        <item name="android:textSelectHandle">?android:attr/textSelectHandle</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:textColorAlertDialogListItem">@color/abc_primary_text_material_light</item>
         <item name="android:actionModeCutDrawable">?attr/actionModeCutDrawable</item>
@@ -1545,7 +1545,7 @@
         <item name="errorTextAppearance">@style/TextAppearance.Design.Error</item>
         <item name="hintTextAppearance">@style/TextAppearance.Design.Hint</item>
         <item name="passwordToggleDrawable">@drawable/design_ic_visibility</item>
-        <item name="passwordToggleTint">@color/design_tint_password_toggle</item>
+        <item name="passwordToggleTint">?attr/colorAccent</item>
     </style>
     <style name="bellcount" parent="@style/Widget.AppCompat.Button">
         <item name="android:gravity">center</item>

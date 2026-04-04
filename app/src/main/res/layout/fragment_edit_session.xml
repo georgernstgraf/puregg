@@ -44,7 +44,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:layout_below="@+id/text_sitzung_beschreibung"/>
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/but_new_section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

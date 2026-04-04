@@ -21,6 +21,7 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -172,7 +173,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         super.onResume();
         Log.d(TAG, "onResume");
         this.appRunning = true;
-        registerReceiver(this.meditationEndReceiver, new IntentFilter(MeditationService.ZAZENTIMER_SESSION_ENDED));
+        ContextCompat.registerReceiver(this, this.meditationEndReceiver, new IntentFilter(MeditationService.ZAZENTIMER_SESSION_ENDED), ContextCompat.RECEIVER_NOT_EXPORTED);
         if (isMyServiceRunning(MeditationService.class)) {
             Log.d(TAG, "MeditationService currently running");
             bindToService(this.handler, new Runnable() { // from class: de.gaffga.android.zazentimer.ZazenTimerActivity.1

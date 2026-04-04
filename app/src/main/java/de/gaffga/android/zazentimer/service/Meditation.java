@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import androidx.core.content.ContextCompat;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.AsyncTask;
@@ -204,7 +205,7 @@ public class Meditation {
     private void installAlarmReceiver() {
         uninstallAlarmReceiver();
         this.sectionEndReceiver = new SectionEndReceiver(this);
-        this.meditationService.registerReceiver(this.sectionEndReceiver, new IntentFilter(INTENT_SECTION_ENDED));
+        ContextCompat.registerReceiver(this.meditationService, this.sectionEndReceiver, new IntentFilter(INTENT_SECTION_ENDED), ContextCompat.RECEIVER_NOT_EXPORTED);
     }
 
     private void uninstallAlarmReceiver() {

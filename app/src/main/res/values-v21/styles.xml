@@ -274,7 +274,7 @@
     <style name="Platform.ThemeOverlay.AppCompat.Light" parent="@style/Platform.ThemeOverlay.AppCompat">
     </style>
     <style name="Widget.Design.AppBarLayout" parent="@style/Base.Widget.Design.AppBarLayout">
-        <item name="android:stateListAnimator">@anim/design_appbar_state_list_animator</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
     <style name="Widget.Design.BottomSheet.Modal" parent="@android:style/Widget">
         <item name="android:background">?android:attr/colorBackground</item>

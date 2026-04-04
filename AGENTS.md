@@ -9,4 +9,7 @@ Before starting any task, read the following files in order:
 7. `docs/ai/DOMAIN.md` (if task involves business logic)
 
 If `HANDOFF.md` contains open tasks, complete them before starting
-any new work unless the user explicitly says otherwise.
+
+## Project-Specific Constraints
+- Agent work is considered complete only if the application successfully starts in the emulator.
+
