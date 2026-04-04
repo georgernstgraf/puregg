@@ -1,6 +1,8 @@
 package de.gaffga.android.zazentimer.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -50,7 +52,11 @@ public class MeditationService extends Service {
         Log.d(TAG, "pauseMeditation");
         if (this.runningMeditation != null) {
             this.runningMeditation.pause();
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            startForeground(1, createNotification(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        } else {
             startForeground(1, createNotification());
+        }
             return this.runningMeditation.isPaused();
         }
         Log.d(TAG, "pauseMeditation(): No meditation seems to be running!");
@@ -65,7 +71,11 @@ public class MeditationService extends Service {
         }
         this.runningMeditation = new Meditation(this, DbOperations.readSections(i));
         this.runningMeditation.start();
-        startForeground(1, createNotification());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            startForeground(1, createNotification(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        } else {
+            startForeground(1, createNotification());
+        }
     }
 
     public void onMeditationEnd() {
@@ -98,8 +108,18 @@ public class MeditationService extends Service {
         Intent intent = new Intent(this, (Class<?>) ZazenTimerActivity.class);
         intent.addFlags(536870912);
         intent.setClass(this, ZazenTimerActivity.class);
+        Notification.Builder builder;
         PendingIntent activity = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        Notification.Builder builder = new Notification.Builder(getBaseContext());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("zazen_timer_channel", "Meditation Timer", NotificationManager.IMPORTANCE_LOW);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+            builder = new Notification.Builder(getBaseContext(), "zazen_timer_channel");
+        } else {
+            builder = new Notification.Builder(getBaseContext());
+        }
         builder.setContentTitle(string);
         builder.setContentText(string2);
         builder.setSmallIcon(i);
