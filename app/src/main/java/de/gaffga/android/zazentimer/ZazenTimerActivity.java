@@ -130,7 +130,8 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
         observeViewModel();
         if (preferences.getBoolean(PREF_KEY_FIRST_START, true)) {
             Log.d(TAG, "This is the first run - create demo sessions");
