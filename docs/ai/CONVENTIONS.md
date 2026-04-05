@@ -17,6 +17,10 @@ Follow these without question. Do not deviate unless explicitly told.
 - After deleting or renaming resource files (layouts, strings, drawables, IDs in `public.xml`), always run `gradle clean` before building and testing. Incremental builds can produce stale R.class entries that cause instrumented tests to fail with incorrect resource IDs.
 - **Always verify GitHub Actions passes after every push.** Run `gh run list --limit 3` and `gh run view <id>` to check. Do not assume CI is green.
 
+## Git Workflow
+- **Trunk-based development.** Commit directly to `main`. No branches, no PRs.
+- Use descriptive commit messages referencing issue numbers (e.g. `fix: backup fails on Android 11+ (#18)`).
+
 ## CI
 - Build command: `./gradle-7.5/bin/gradle build` (NOT `./gradlew`)
 - JDK version: 17 (AGP 7.4+ requirement)
