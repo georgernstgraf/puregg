@@ -91,6 +91,17 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     private Handler handler;
     private NavController navController;
 
+    private NavController getNavController() {
+        if (navController == null) {
+            NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.nav_host_fragment);
+            if (navHostFragment != null) {
+                navController = navHostFragment.getNavController();
+            }
+        }
+        return navController;
+    }
+
     private static class MeditationEndReceiver extends BroadcastReceiver {
         private final ZazenTimerActivity activity;
 
@@ -130,8 +141,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        navController = navHostFragment.getNavController();
         observeViewModel();
         if (preferences.getBoolean(PREF_KEY_FIRST_START, true)) {
             Log.d(TAG, "This is the first run - create demo sessions");
@@ -225,38 +234,50 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
 
     @Override
     public void onBackPressed() {
-        if (!navController.popBackStack()) {
+        NavController nc = getNavController();
+        if (nc == null || !nc.popBackStack()) {
             super.onBackPressed();
         }
     }
 
     public boolean isMeditationScreenShown() {
-        if (navController.getCurrentDestination() == null) {
+        NavController nc = getNavController();
+        if (nc == null || nc.getCurrentDestination() == null) {
             return false;
         }
-        return navController.getCurrentDestination().getId() == R.id.meditationFragment;
+        return nc.getCurrentDestination().getId() == R.id.meditationFragment;
     }
 
     public void showAboutScreen() {
-        navController.navigate(R.id.action_mainFragment_to_aboutFragment);
+        NavController nc = getNavController();
+        if (nc == null) return;
+        nc.navigate(R.id.action_mainFragment_to_aboutFragment);
     }
 
     public void showSettingsScreen() {
-        navController.navigate(R.id.action_mainFragment_to_settingsFragment);
+        NavController nc = getNavController();
+        if (nc == null) return;
+        nc.navigate(R.id.action_mainFragment_to_settingsFragment);
     }
 
     public void showMeditationScreen() {
-        navController.navigate(R.id.action_global_meditationFragment);
+        NavController nc = getNavController();
+        if (nc == null) return;
+        nc.navigate(R.id.action_global_meditationFragment);
     }
 
     public void showMainScreen() {
-        navController.popBackStack(R.id.mainFragment, false);
+        NavController nc = getNavController();
+        if (nc == null) return;
+        nc.popBackStack(R.id.mainFragment, false);
     }
 
     public void showSessionEditFragment(int sessionId) {
+        NavController nc = getNavController();
+        if (nc == null) return;
         Bundle args = new Bundle();
         args.putInt("sessionId", sessionId);
-        navController.navigate(R.id.action_mainFragment_to_sessionEditFragment, args);
+        nc.navigate(R.id.action_mainFragment_to_sessionEditFragment, args);
     }
 
     public void showPrivacyScreen() {
@@ -363,8 +384,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
-        if (navController.getCurrentDestination() != null
-                && navController.getCurrentDestination().getId() == R.id.mainFragment) {
+        NavController nc = getNavController();
+        if (nc != null && nc.getCurrentDestination() != null
+                && nc.getCurrentDestination().getId() == R.id.mainFragment) {
             getMenuInflater().inflate(R.menu.main_menu, menu);
         }
         MenuItem findItem = menu.findItem(R.id.menu_copy_session);
