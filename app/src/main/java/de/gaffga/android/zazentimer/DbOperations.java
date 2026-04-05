@@ -1,6 +1,7 @@
 package de.gaffga.android.zazentimer;
 
 import android.content.Context;
+import androidx.room.Room;
 import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.bo.Session;
 import de.gaffga.android.zazentimer.database.AppDatabase;
@@ -8,23 +9,37 @@ import de.gaffga.android.zazentimer.database.SectionDao;
 import de.gaffga.android.zazentimer.database.SectionEntity;
 import de.gaffga.android.zazentimer.database.SessionDao;
 import de.gaffga.android.zazentimer.database.SessionEntity;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class DbOperations {
-    private static AppDatabase appDb;
-    private static SessionDao sessionDao;
-    private static SectionDao sectionDao;
+    private final Context context;
+    private AppDatabase appDb;
+    private SessionDao sessionDao;
+    private SectionDao sectionDao;
 
-    public static void init(Context context) {
-        if (appDb == null) {
-            appDb = AppDatabase.getInstance(context);
-            sessionDao = appDb.sessionDao();
-            sectionDao = appDb.sectionDao();
-        }
+    @Inject
+    public DbOperations(@ApplicationContext Context context) {
+        this.context = context.getApplicationContext();
+        openDatabase();
     }
 
-    public static void close() {
+    private void openDatabase() {
+        this.appDb = Room.databaseBuilder(context,
+                AppDatabase.class, AppDatabase.DATABASE_NAME)
+                .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3, AppDatabase.MIGRATION_3_4)
+                .addCallback(AppDatabase.ON_CREATE_CALLBACK)
+                .allowMainThreadQueries()
+                .build();
+        this.sessionDao = appDb.sessionDao();
+        this.sectionDao = appDb.sectionDao();
+    }
+
+    public void close() {
         if (appDb != null) {
             appDb.close();
             appDb = null;
@@ -33,24 +48,29 @@ public class DbOperations {
         }
     }
 
-    public static boolean isConnected() {
+    public void reopen() {
+        close();
+        openDatabase();
+    }
+
+    public boolean isConnected() {
         return appDb != null && appDb.isOpen();
     }
 
-    public static Session readSession(int id) {
+    public Session readSession(int id) {
         SessionEntity entity = sessionDao.getSessionById(id);
         return entity != null ? toBo(entity) : null;
     }
 
-    public static void updateSession(Session session) {
+    public void updateSession(Session session) {
         sessionDao.update(toEntity(session));
     }
 
-    public static void deleteSession(int id) {
+    public void deleteSession(int id) {
         sessionDao.deleteById(id);
     }
 
-    public static int duplicateSession(int sourceId, String newName) {
+    public int duplicateSession(int sourceId, String newName) {
         Session source = readSession(sourceId);
         source.name = newName;
         Section[] sections = readSections(sourceId);
@@ -61,20 +81,20 @@ public class DbOperations {
         return source.id;
     }
 
-    public static void deleteSection(long id) {
+    public void deleteSection(long id) {
         sectionDao.deleteById(id);
     }
 
-    public static Section readSection(int id) {
+    public Section readSection(int id) {
         SectionEntity entity = sectionDao.getSectionById(id);
         return entity != null ? toBo(entity) : null;
     }
 
-    public static void updateSection(Section section) {
+    public void updateSection(Section section) {
         sectionDao.update(toEntity(section));
     }
 
-    public static void switchPositions(long id1, long id2) {
+    public void switchPositions(long id1, long id2) {
         SectionEntity s1 = sectionDao.getSectionById((int) id1);
         SectionEntity s2 = sectionDao.getSectionById((int) id2);
         if (s1 != null && s2 != null) {
@@ -85,7 +105,7 @@ public class DbOperations {
         }
     }
 
-    public static void insertSection(Session session, Section section) {
+    public void insertSection(Session session, Section section) {
         if (section.rank == -1) {
             Integer maxRank = sectionDao.getMaxRank(session.id);
             section.rank = (maxRank != null ? maxRank : 0) + 1;
@@ -96,13 +116,13 @@ public class DbOperations {
         section.id = (int) newId;
     }
 
-    public static void insertSession(Session session) {
+    public void insertSession(Session session) {
         SessionEntity entity = toEntity(session);
         long newId = sessionDao.insert(entity);
         session.id = (int) newId;
     }
 
-    public static Section[] readSections(int sessionId) {
+    public Section[] readSections(int sessionId) {
         List<SectionEntity> entities = sectionDao.getSectionsForSession(sessionId);
         ArrayList<Section> result = new ArrayList<>();
         for (SectionEntity entity : entities) {
@@ -111,7 +131,7 @@ public class DbOperations {
         return result.toArray(new Section[0]);
     }
 
-    public static Session[] readSessions() {
+    public Session[] readSessions() {
         List<SessionEntity> entities = sessionDao.getAllSessions();
         ArrayList<Session> result = new ArrayList<>();
         for (SessionEntity entity : entities) {

@@ -12,9 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.RunOnConnect;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import javax.inject.Inject;
 
+@HiltViewModel
 public class MeditationViewModel extends AndroidViewModel {
     private static final String TAG = "ZMT_MeditationViewModel";
 
@@ -28,6 +32,7 @@ public class MeditationViewModel extends AndroidViewModel {
     private boolean updateRunning = false;
     private int selectedSessionId = -1;
     private boolean timerViewInitialized = false;
+    private final DbOperations dbOperations;
 
     private final Runnable updateRunnable = new Runnable() {
         @Override
@@ -40,8 +45,10 @@ public class MeditationViewModel extends AndroidViewModel {
         }
     };
 
-    public MeditationViewModel(@NonNull Application application) {
+    @Inject
+    public MeditationViewModel(@NonNull Application application, DbOperations dbOperations) {
         super(application);
+        this.dbOperations = dbOperations;
         meditationEnded.setValue(false);
     }
 
@@ -200,7 +207,7 @@ public class MeditationViewModel extends AndroidViewModel {
         PowerManager powerManager = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
         if (powerManager != null) {
             int totalSeconds = 0;
-            for (de.gaffga.android.zazentimer.bo.Section section : de.gaffga.android.zazentimer.DbOperations.readSections(selectedSessionId)) {
+            for (de.gaffga.android.zazentimer.bo.Section section : dbOperations.readSections(selectedSessionId)) {
                 totalSeconds += section.duration;
             }
             this.wakeLock = null;

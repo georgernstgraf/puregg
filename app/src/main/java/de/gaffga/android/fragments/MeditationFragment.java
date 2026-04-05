@@ -1,6 +1,5 @@
 package de.gaffga.android.fragments;
 
-import android.app.Activity;
 import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,8 +14,10 @@ import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.service.MeditationUiState;
 import de.gaffga.android.zazentimer.service.MeditationViewModel;
 import de.gaffga.android.zazentimer.views.TimerView;
+import dagger.hilt.android.AndroidEntryPoint;
 
-public class MeditationFragment extends androidx.fragment.app.Fragment {
+@AndroidEntryPoint
+public class MeditationFragment extends Fragment {
     private static final String TAG = "ZMT_MeditationFragment";
     private ImageButton butPause;
     private ImageButton butStop;
@@ -25,11 +26,6 @@ public class MeditationFragment extends androidx.fragment.app.Fragment {
     private MeditationViewModel viewModel;
 
     public MeditationFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
     }
 
     @Override
@@ -66,23 +62,9 @@ public class MeditationFragment extends androidx.fragment.app.Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Log.d(TAG, "onAttach (Activity)");
-        handleAttach(activity);
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach (Context)");
-        handleAttach(context);
-    }
-
-    private void handleAttach(Context context) {
-        if (context == null) {
-            return;
-        }
         this.context = context;
         this.mAttached = true;
     }

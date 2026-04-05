@@ -11,7 +11,10 @@ import android.util.Log;
 import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
+import dagger.hilt.android.AndroidEntryPoint;
+import javax.inject.Inject;
 
+@AndroidEntryPoint
 public class MeditationService extends Service {
     private static final int NOTIFY_MEDITATION_RUNNING = 1;
     private static final String TAG = "ZMT_MeditationService";
@@ -21,6 +24,8 @@ public class MeditationService extends Service {
     private IBinder binder;
     private Meditation runningMeditation;
 
+    @Inject DbOperations dbOperations;
+
     public static boolean isServiceRunning() { return isRunning; }
 
     @Override
@@ -29,14 +34,14 @@ public class MeditationService extends Service {
         isRunning = true;
     }
 
-    @Override // android.app.Service
+    @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind");
         this.binder = new MeditationServiceBinder(this);
         return this.binder;
     }
 
-    @Override // android.app.Service
+    @Override
     public boolean onUnbind(Intent intent) {
         Log.d(TAG, "onUnbind");
         this.binder = null;
@@ -57,7 +62,7 @@ public class MeditationService extends Service {
         return START_STICKY;
     }
 
-    @Override // android.app.Service
+    @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         isRunning = false;
@@ -93,7 +98,7 @@ public class MeditationService extends Service {
             Log.d(TAG, "startMeditation(): Meditation seems to be already running!");
             return;
         }
-        this.runningMeditation = new Meditation(this, DbOperations.readSections(i));
+        this.runningMeditation = new Meditation(this, dbOperations.readSections(i));
         this.runningMeditation.start();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             startForeground(1, createNotification(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);

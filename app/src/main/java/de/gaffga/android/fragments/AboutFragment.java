@@ -11,25 +11,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import de.gaffga.android.zazentimer.R;
+import dagger.hilt.android.AndroidEntryPoint;
 
-public class AboutFragment extends androidx.fragment.app.Fragment {
-    @Override // android.app.Fragment
+@AndroidEntryPoint
+public class AboutFragment extends Fragment {
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
     }
 
-    @Override // android.app.Fragment
+    @Override
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
     }
 
-    @Override // android.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.fragment_about, viewGroup, false);
-        ((Button) inflate.findViewById(R.id.but_about_ok)).setOnClickListener(new View.OnClickListener() { // from class: de.gaffga.android.fragments.AboutFragment.1
-            @Override // android.view.View.OnClickListener
+        ((Button) inflate.findViewById(R.id.but_about_ok)).setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).popBackStack();
             }

@@ -18,6 +18,7 @@ import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
 import de.gaffga.android.zazentimer.database.AppDatabase;
+import dagger.hilt.android.AndroidEntryPoint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -27,13 +28,17 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+import javax.inject.Inject;
 
+@AndroidEntryPoint
 public class SettingsFragment extends PreferenceFragmentCompat {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
     private static final String TAG = "ZMT_SettingsFragment";
     private static final int REQUEST_BACKUP = 201;
     private static final int REQUEST_RESTORE = 202;
+
+    @Inject DbOperations dbOperations;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String rootKey) {
@@ -123,7 +128,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
         brightnessPreference.setEnabled(checkBoxPreference6.isChecked());
 
-        // Backup via SAF — user picks where to save
         Preference backupPref = findPreference("backup_to_sd");
         backupPref.setEnabled(true);
         backupPref.setSummary(R.string.pref_sum_backup);
@@ -139,7 +143,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Restore via SAF — user picks the backup file
         Preference restorePref = findPreference("restore_from_sd");
         restorePref.setEnabled(true);
         restorePref.setSummary(R.string.pref_sum_restore);
@@ -180,7 +183,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
         requireActivity().getContentResolver().takePersistableUriPermission(
                 uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
         if (requestCode == REQUEST_BACKUP) {
             doBackup(uri);
         } else if (requestCode == REQUEST_RESTORE) {
@@ -200,7 +202,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
         });
     }
-
     private boolean doRealBackup(Uri uri) {
         Log.d(TAG, "Backup to URI: " + uri);
         boolean failed = false;
@@ -211,16 +212,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return false;
             }
             ZipOutputStream zos = new ZipOutputStream(os);
-
-            // Backup database
             ZipEntry ze = new ZipEntry("zentimer");
             zos.putNextEntry(ze);
             if (!sendFile(requireActivity().getDatabasePath("zentimer"), zos)) {
                 failed = true;
             }
             zos.closeEntry();
-
-            // Backup app files
             File filesDir = requireActivity().getFilesDir();
             File[] listFiles = filesDir.listFiles(f -> !f.getName().equals("InstantRun"));
             if (listFiles != null) {
@@ -240,7 +237,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
         return !failed;
     }
-
     private void doRestore(Uri uri) {
         executor.execute(() -> {
             int result = doRealRestore(uri);
@@ -255,12 +251,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
         });
     }
-
     private int doRealRestore(Uri uri) {
         Log.d(TAG, "Restore from URI: " + uri);
         boolean failed = false;
         try {
-            // Copy URI content to a temp file so we can use ZipFile (needs seekable)
             File tempFile = File.createTempFile("restore", ".zip", requireActivity().getCacheDir());
             InputStream is = requireActivity().getContentResolver().openInputStream(uri);
             if (is == null) {
@@ -275,17 +269,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
             fos.close();
             is.close();
-
             ZipFile zipFile = new ZipFile(tempFile);
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 if (entry.getName().equals(AppDatabase.DATABASE_NAME)) {
-                    DbOperations.close();
+                    dbOperations.close();
                     if (!receiveFile(zipFile.getInputStream(entry), requireActivity().getDatabasePath(AppDatabase.DATABASE_NAME))) {
                         failed = true;
                     }
-                    DbOperations.init(requireActivity());
+                    dbOperations.reopen();
                 } else if (!receiveFile(zipFile.getInputStream(entry), new File(requireActivity().getFilesDir(), entry.getName()))) {
                     failed = true;
                 }
@@ -316,7 +309,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return false;
         }
     }
-
     private boolean sendFile(File file, OutputStream outputStream) {
         Log.i(TAG, "sending File to zip: " + file.getName());
         try {

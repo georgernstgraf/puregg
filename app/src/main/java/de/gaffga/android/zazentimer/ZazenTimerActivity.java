@@ -34,9 +34,12 @@ import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.bo.Session;
 import de.gaffga.android.zazentimer.service.MeditationService;
 import de.gaffga.android.zazentimer.service.MeditationViewModel;
+import dagger.hilt.android.AndroidEntryPoint;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
+@AndroidEntryPoint
 public class ZazenTimerActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
     public static final String INTENT_DATA_SHOW_PREF_ON_START = "gotoPrefs";
     public static final int PREF_DEFAULT_BRIGHTNESS = 0;
@@ -91,6 +94,8 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     private Handler handler;
     private NavController navController;
 
+    @Inject DbOperations dbOperations;
+
     private NavController getNavController() {
         if (navController == null) {
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -133,7 +138,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         this.handler = new Handler(Looper.getMainLooper());
         this.viewModel = new ViewModelProvider(this).get(MeditationViewModel.class);
         this.viewModel.setHandler(this.handler);
-        DbOperations.init(this);
         BellCollection.getInstance().init(this);
         convertFromOldVersions();
         setContentView(R.layout.main);
@@ -147,7 +151,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
             createDemoSessions();
             preferences.edit().putBoolean(PREF_KEY_FIRST_START, false).apply();
         }
-        DbOperations.init(this);
         BellCollection.getInstance().init(this);
     }
 
@@ -320,7 +323,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
             case R.id.menu_copy_session:
                 Log.d(TAG, "duplicate session");
                 int selectedSessionId = getSelectedSessionId();
-                int duplicateSession = DbOperations.duplicateSession(selectedSessionId, getString(R.string.copy_prefix) + " " + DbOperations.readSession(selectedSessionId).name);
+                int duplicateSession = dbOperations.duplicateSession(selectedSessionId, getString(R.string.copy_prefix) + " " + dbOperations.readSession(selectedSessionId).name);
                 MainFragment mainFrag = findMainFragment();
                 if (mainFrag != null) {
                     mainFrag.updateSessionList();
@@ -335,7 +338,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        DbOperations.deleteSession(ZazenTimerActivity.this.getSelectedSessionId());
+                        dbOperations.deleteSession(ZazenTimerActivity.this.getSelectedSessionId());
                         MainFragment f = ZazenTimerActivity.this.findMainFragment();
                         if (f != null) {
                             f.updateSessionList();
@@ -359,7 +362,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
                 Session session = new Session();
                 session.name = "";
                 session.description = "";
-                DbOperations.insertSession(session);
+                dbOperations.insertSession(session);
                 MainFragment mainFrag2 = findMainFragment();
                 if (mainFrag2 != null) {
                     mainFrag2.updateSessionList();
@@ -419,7 +422,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         Session session = new Session();
         session.description = getResources().getString(R.string.demo_sess1_description);
         session.name = getResources().getString(R.string.demo_sess1_name);
-        DbOperations.insertSession(session);
+        dbOperations.insertSession(session);
         Section section = new Section();
         section.bell = -2;
         section.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_88).getUri().toString();
@@ -428,7 +431,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section.duration = 30;
         section.name = getResources().getString(R.string.demo_sess1_sec1_name);
         section.rank = 1;
-        DbOperations.insertSection(session, section);
+        dbOperations.insertSection(session, section);
         Section section2 = new Section();
         section2.bell = -2;
         section2.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_107).getUri().toString();
@@ -437,7 +440,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section2.duration = 900;
         section2.name = getResources().getString(R.string.demo_sess1_sec2_name);
         section2.rank = 2;
-        DbOperations.insertSection(session, section2);
+        dbOperations.insertSection(session, section2);
         Section section3 = new Section();
         section3.bell = -2;
         section3.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_88).getUri().toString();
@@ -446,7 +449,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section3.duration = 300;
         section3.name = getResources().getString(R.string.demo_sess1_sec3_name);
         section3.rank = 3;
-        DbOperations.insertSection(session, section3);
+        dbOperations.insertSection(session, section3);
         Section section4 = new Section();
         section4.bell = -2;
         section4.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_107).getUri().toString();
@@ -455,7 +458,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section4.duration = 900;
         section4.name = getResources().getString(R.string.demo_sess1_sec4_name);
         section4.rank = 4;
-        DbOperations.insertSection(session, section4);
+        dbOperations.insertSection(session, section4);
         Section section5 = new Section();
         section5.bell = -2;
         section5.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_88).getUri().toString();
@@ -464,7 +467,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section5.duration = 300;
         section5.name = getResources().getString(R.string.demo_sess1_sec5_name);
         section5.rank = 5;
-        DbOperations.insertSection(session, section5);
+        dbOperations.insertSection(session, section5);
         Section section6 = new Section();
         section6.bell = -2;
         section6.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_107).getUri().toString();
@@ -473,11 +476,11 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section6.duration = 900;
         section6.name = getResources().getString(R.string.demo_sess1_sec6_name);
         section6.rank = 6;
-        DbOperations.insertSection(session, section6);
+        dbOperations.insertSection(session, section6);
         Session session2 = new Session();
         session2.description = getResources().getString(R.string.demo_sess2_description);
         session2.name = getResources().getString(R.string.demo_sess2_name);
-        DbOperations.insertSession(session2);
+        dbOperations.insertSession(session2);
         Section section7 = new Section();
         section7.bell = -2;
         section7.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_TIB_RHINBOWL_230).getUri().toString();
@@ -486,7 +489,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section7.duration = 5;
         section7.name = getResources().getString(R.string.demo_sess1_sec1_name);
         section7.rank = 1;
-        DbOperations.insertSection(session2, section7);
+        dbOperations.insertSection(session2, section7);
         Section section8 = new Section();
         section8.bell = -2;
         section8.bellUri = BellCollection.getInstance().getBell(BellCollection.BELL_IDX_JAP_RHINBOWL_107).getUri().toString();
@@ -495,12 +498,12 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         section8.duration = 600;
         section8.name = getResources().getString(R.string.demo_sess1_sec2_name);
         section8.rank = 2;
-        DbOperations.insertSection(session2, section8);
+        dbOperations.insertSection(session2, section8);
     }
 
     @Override
     public void onStartPressed() {
-        if (DbOperations.readSections(getSelectedSessionId()).length == 0) {
+        if (dbOperations.readSections(getSelectedSessionId()).length == 0) {
             if (getSelectedSessionId() == -1) {
                 Toast.makeText(this, R.string.no_session_exists, 0).show();
                 return;
@@ -608,23 +611,23 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     private void convertBellIndices() {
-        for (Session session : DbOperations.readSessions()) {
-            for (Section section : DbOperations.readSections(session.id)) {
+        for (Session session : dbOperations.readSessions()) {
+            for (Section section : dbOperations.readSections(session.id)) {
                 if (section.bellUri == null || section.bellUri.trim().length() == 0) {
                     Bell bell = BellCollection.getInstance().getBell(section.bell);
                     if (bell != null) {
                         section.bellUri = bell.getUri().toString();
                         section.bell = -2;
-                        DbOperations.updateSection(section);
+                        dbOperations.updateSection(section);
                     } else {
                         section.bellUri = BellCollection.getInstance().getDemoBell().getUri().toString();
                         section.bell = -2;
-                        DbOperations.updateSection(section);
+                        dbOperations.updateSection(section);
                     }
                 } else if (section.bell == -1) {
                     section.bell = -2;
                     section.bellUri = BellCollection.getInstance().getDemoBell().getUri().toString();
-                    DbOperations.updateSection(section);
+                    dbOperations.updateSection(section);
                 }
             }
         }
@@ -635,12 +638,12 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void resetDatabaseForTest() {
-        Session[] readSessions = DbOperations.readSessions();
+        Session[] readSessions = dbOperations.readSessions();
         for (int i = 0; i < readSessions.length; i++) {
-            for (Section section : DbOperations.readSections(readSessions[i].id)) {
-                DbOperations.deleteSection(section.id);
+            for (Section section : dbOperations.readSections(readSessions[i].id)) {
+                dbOperations.deleteSection(section.id);
             }
-            DbOperations.deleteSession(readSessions[i].id);
+            dbOperations.deleteSession(readSessions[i].id);
         }
         createDemoSessions();
         runOnUiThread(new Runnable() {

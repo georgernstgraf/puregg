@@ -23,9 +23,12 @@ import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.bo.Session;
 import de.gaffga.android.zazentimer.databinding.FragmentEditSessionBinding;
 import com.google.android.material.snackbar.Snackbar;
+import dagger.hilt.android.AndroidEntryPoint;
 import java.util.Arrays;
 import java.util.List;
+import javax.inject.Inject;
 
+@AndroidEntryPoint
 public class SessionEditFragment extends Fragment {
     private static final String TAG = "ZMT_SessionEditFragment";
     private FragmentEditSessionBinding binding;
@@ -35,6 +38,8 @@ public class SessionEditFragment extends Fragment {
     private Session session = null;
     private int sessionId;
     private SectionListAdapter adapter;
+
+    @Inject DbOperations dbOperations;
 
     private void handleAttach(Context context) {
     }
@@ -83,7 +88,6 @@ public class SessionEditFragment extends Fragment {
         Log.d(TAG, "onCreateView");
         binding = FragmentEditSessionBinding.inflate(layoutInflater, viewGroup, false);
         this.pref = ZazenTimerActivity.getPreferences(getActivity());
-        DbOperations.init(getActivity());
 
         adapter = new SectionListAdapter(new SectionListAdapter.OnItemClickListener() {
             @Override
@@ -101,14 +105,14 @@ public class SessionEditFragment extends Fragment {
                 public void onSwipe(int position) {
                     final Section deletedSection = adapter.getItem(position);
                     final int deletedPosition = position;
-                    DbOperations.deleteSection(deletedSection.id);
+                    dbOperations.deleteSection(deletedSection.id);
                     adapter.removeItem(position);
 
                     Snackbar.make(binding.list, "Deleted '" + deletedSection.toString() + "'", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                DbOperations.insertSection(SessionEditFragment.this.session, deletedSection);
+                                dbOperations.insertSection(SessionEditFragment.this.session, deletedSection);
                                 adapter.insertItem(deletedPosition, deletedSection);
                             }
                         })
@@ -150,7 +154,7 @@ public class SessionEditFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "sessionId=" + this.sessionId);
-        this.session = DbOperations.readSession(this.sessionId);
+        this.session = dbOperations.readSession(this.sessionId);
         if (this.session == null) {
             Log.e(TAG, "session is NULL");
         } else {
@@ -159,7 +163,7 @@ public class SessionEditFragment extends Fragment {
         binding.textSitzungName.setText(this.session.name);
         binding.textSitzungBeschreibung.setText(this.session.description);
         getActivity().invalidateOptionsMenu();
-        this.sections = DbOperations.readSections(this.session.id);
+        this.sections = dbOperations.readSections(this.session.id);
         initSectionList();
         binding.textSitzungName.setText(this.session.name);
         binding.textSitzungBeschreibung.setText(this.session.description);
@@ -192,16 +196,16 @@ public class SessionEditFragment extends Fragment {
         for (int i = 0; i < items.size(); i++) {
             Section section = items.get(i);
             section.rank = i + 1;
-            DbOperations.updateSection(section);
+            dbOperations.updateSection(section);
         }
         this.session.name = binding.textSitzungName.getText().toString();
         this.session.description = binding.textSitzungBeschreibung.getText().toString();
-        DbOperations.updateSession(this.session);
+        dbOperations.updateSession(this.session);
     }
 
     public void doCreateNewSection() {
         Section section = new Section(getResources().getString(R.string.default_section_name), 60);
-        DbOperations.insertSection(this.session, section);
+        dbOperations.insertSection(this.session, section);
         navigateToSectionEdit(section.id);
     }
 

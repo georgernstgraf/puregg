@@ -19,9 +19,12 @@ import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
 import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.bo.Session;
+import dagger.hilt.android.AndroidEntryPoint;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
-public class MainFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemSelectedListener {
+@AndroidEntryPoint
+public class MainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "ZMT_MainFragment";
     private Button butStart;
     private Context context;
@@ -33,11 +36,13 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
     private ArrayList<Session> sessions = new ArrayList<>();
     private int selectedSessionId = -1;
 
+    @Inject DbOperations dbOperations;
+
     public interface OnFragmentInteractionListener {
         void onStartPressed();
     }
 
-    @Override // android.widget.AdapterView.OnItemSelectedListener
+    @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
@@ -46,20 +51,20 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
         this.mAttached = false;
     }
 
-    @Override // android.app.Fragment
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Log.d(TAG, "onCreate");
     }
 
-    @Override // android.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         Log.d(TAG, "onCreateView");
         View inflate = layoutInflater.inflate(R.layout.fragment_main, viewGroup, false);
         this.butStart = (Button) inflate.findViewById(R.id.but_start);
         this.listSessions = (Spinner) inflate.findViewById(R.id.spin_sessions);
-        this.butStart.setOnClickListener(new View.OnClickListener() { // from class: de.gaffga.android.fragments.MainFragment.1
-            @Override // android.view.View.OnClickListener
+        this.butStart.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 MainFragment.this.mListener.onStartPressed();
             }
@@ -70,14 +75,14 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
         return inflate;
     }
 
-    @Override // android.app.Fragment
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.d(TAG, "onAttach (Activity)");
         handleAttach(activity);
     }
 
-    @Override // android.app.Fragment
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach (Context)");
@@ -98,7 +103,7 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
         throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
     }
 
-    @Override // android.app.Fragment
+    @Override
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach");
@@ -106,7 +111,7 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
         this.mAttached = false;
     }
 
-    @Override // android.app.Fragment
+    @Override
     public void onResume() {
         int positionById;
         super.onResume();
@@ -123,12 +128,12 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
     }
 
     public void updateSessionList() {
-        Session[] readSessions = DbOperations.readSessions();
+        Session[] readSessions = dbOperations.readSessions();
         ArrayList<SessionWithTimeInfo> arrayList = new ArrayList<>();
         this.sessions.clear();
         for (Session session : readSessions) {
             int i = 0;
-            for (Section section : DbOperations.readSections(session.id)) {
+            for (Section section : dbOperations.readSections(session.id)) {
                 i += section.duration;
             }
             arrayList.add(new SessionWithTimeInfo(session, i));
@@ -154,7 +159,7 @@ public class MainFragment extends androidx.fragment.app.Fragment implements Adap
         this.listSessions.setSelection(SpinnerUtil.getPositionById(this.sessions, i));
     }
 
-    @Override // android.widget.AdapterView.OnItemSelectedListener
+    @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
         Session session = this.sessions.get(i);
         this.selectedSessionId = session.id;

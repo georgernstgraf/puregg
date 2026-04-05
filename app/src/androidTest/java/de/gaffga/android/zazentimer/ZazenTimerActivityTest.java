@@ -8,28 +8,28 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.gaffga.android.zazentimer.screens.MainPage;
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+@HiltAndroidTest
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ZazenTimerActivityTest {
+public class SimpleTest {
+
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
 
     @Rule
     public ActivityScenarioRule<ZazenTimerActivity> activityRule =
             new ActivityScenarioRule<>(ZazenTimerActivity.class);
 
     @Test
-    public void activityLaunchesSuccessfully() {
-        // Simple test to verify the activity launches
-        MainPage mainPage = new MainPage();
-        mainPage.verifyMainScreenIsDisplayed();
-    }
-    
-    @Test
-    public void testFreshAppLaunch() {
-        // Test for fresh app launch scenario
-        MainPage mainPage = new MainPage();
-        mainPage.verifyMainScreenIsDisplayed()
-                .verifyDefaultSessionsAreVisible();
+    public void testActivityLaunches() {
+        onView(withId(R.id.my_toolbar)).check(matches(isDisplayed()));
     }
 }

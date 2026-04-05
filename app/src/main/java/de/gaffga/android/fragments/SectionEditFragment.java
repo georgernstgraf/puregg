@@ -23,10 +23,13 @@ import de.gaffga.android.zazentimer.audio.Audio;
 import de.gaffga.android.zazentimer.audio.BellCollection;
 import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.databinding.FragmentEditSectionBinding;
+import dagger.hilt.android.AndroidEntryPoint;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
+@AndroidEntryPoint
 public class SectionEditFragment extends Fragment {
     public static int INTENT_GET_BELL = 99;
     private static final String TAG = "ZMT_SectionEdit";
@@ -39,6 +42,8 @@ public class SectionEditFragment extends Fragment {
     private Section section;
     private int sectionId;
     private TextView tvGaps[] = new TextView[15];
+
+    @Inject DbOperations dbOperations;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -61,7 +66,6 @@ public class SectionEditFragment extends Fragment {
         Log.d(TAG, "onCreateView");
         binding = FragmentEditSectionBinding.inflate(layoutInflater, viewGroup, false);
         this.pref = ZazenTimerActivity.getPreferences(getActivity());
-        DbOperations.init(getActivity());
         getViewComponents();
         return binding.getRoot();
     }
@@ -69,7 +73,7 @@ public class SectionEditFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.section = DbOperations.readSection(this.sectionId);
+        this.section = dbOperations.readSection(this.sectionId);
         this.audio = new Audio(getActivity());
         getActivity().invalidateOptionsMenu();
         fillViewFromData();
@@ -91,7 +95,7 @@ public class SectionEditFragment extends Fragment {
         this.audio.release();
         this.audio = null;
         fillDataFromViews();
-        DbOperations.updateSection(this.section);
+        dbOperations.updateSection(this.section);
     }
 
     @Override
