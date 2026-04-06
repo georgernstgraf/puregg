@@ -29,7 +29,7 @@ public class SimpleTest {
 
     @Before
     public void init() {
-        hiltRule.inject(this);
+        hiltRule.inject();
     }
 
     @Test
