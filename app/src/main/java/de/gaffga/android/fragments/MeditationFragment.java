@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import android.app.AlertDialog;
 import com.google.android.material.transition.MaterialSharedAxis;
 import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.service.MeditationUiState;
@@ -121,7 +121,7 @@ public class MeditationFragment extends Fragment {
     }
 
     private void showStopConfirmationDialog() {
-        new MaterialAlertDialogBuilder(requireContext())
+        new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.stop_meditation_title)
                 .setMessage(R.string.stop_meditation_message)
                 .setPositiveButton(R.string.stop_meditation_stop, (dialog, which) -> {
