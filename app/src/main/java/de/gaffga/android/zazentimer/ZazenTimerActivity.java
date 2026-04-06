@@ -263,14 +263,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     @Override
-    public void onBackPressed() {
-        NavController nc = getNavController();
-        if (nc == null || !nc.popBackStack()) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         NavController nc = getNavController();
         if (nc != null && appBarConfiguration != null) {

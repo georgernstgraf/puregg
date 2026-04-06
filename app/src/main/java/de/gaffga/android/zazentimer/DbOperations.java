@@ -76,6 +76,7 @@ public class DbOperations {
         Section[] sections = readSections(sourceId);
         insertSession(source);
         for (Section section : sections) {
+            section.id = 0;
             insertSection(source, section);
         }
         return source.id;

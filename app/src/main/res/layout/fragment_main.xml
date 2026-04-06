@@ -38,15 +38,4 @@
 
     </RelativeLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_new_session"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_plus"
-        android:contentDescription="@string/menu_new_session"
-        app:layout_anchor="@id/recycler_sessions"
-        app:layout_anchorGravity="bottom|end" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

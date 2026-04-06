@@ -5,4 +5,9 @@
         android:id="@+id/menu_privacy"
         android:title="@string/menu_privacy"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_add_session"
+        android:icon="@drawable/ic_plus"
+        android:title="@string/menu_add_session"
+        app:showAsAction="never"/>
 </menu>

@@ -45,15 +45,7 @@ public class MeditationFragment extends Fragment {
         View inflate = layoutInflater.inflate(R.layout.fragment_meditation, viewGroup, false);
         this.butStop = (ImageButton) inflate.findViewById(R.id.but_stop);
         this.butPause = (ImageButton) inflate.findViewById(R.id.but_pause);
-        this.butStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (MeditationFragment.this.viewModel != null) {
-                    MeditationFragment.this.viewModel.stopMeditation();
-                }
-                MeditationFragment.this.updateButtons();
-            }
-        });
+        this.butStop.setOnClickListener(view -> MeditationFragment.this.showStopConfirmationDialog());
         this.butPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -11,10 +11,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.gaffga.android.base.SpinnerUtil;
 import com.google.android.material.transition.MaterialFadeThrough;
 import de.gaffga.android.zazentimer.DbOperations;
@@ -30,7 +32,6 @@ import javax.inject.Inject;
 public class MainFragment extends Fragment {
     private static final String TAG = "ZMT_MainFragment";
     private Button butStart;
-    private FloatingActionButton fabNewSession;
     private Context context;
     private RecyclerView recyclerSessions;
     private boolean mAttached;
@@ -54,6 +55,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        setHasOptionsMenu(true);
         setEnterTransition(new MaterialFadeThrough());
         Log.d(TAG, "onCreate");
     }
@@ -63,18 +65,11 @@ public class MainFragment extends Fragment {
         Log.d(TAG, "onCreateView");
         View inflate = layoutInflater.inflate(R.layout.fragment_main, viewGroup, false);
         this.butStart = (Button) inflate.findViewById(R.id.but_start);
-        this.fabNewSession = (FloatingActionButton) inflate.findViewById(R.id.fab_new_session);
         this.recyclerSessions = (RecyclerView) inflate.findViewById(R.id.recycler_sessions);
         this.butStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainFragment.this.mListener.onStartPressed();
-            }
-        });
-        this.fabNewSession.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainFragment.this.onFabNewSessionClicked();
             }
         });
         this.recyclerSessions.setLayoutManager(new LinearLayoutManager(this.context));
@@ -106,6 +101,20 @@ public class MainFragment extends Fragment {
         );
         this.recyclerSessions.setAdapter(this.sessionListAdapter);
         return inflate;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_add_session) {
+            onFabNewSessionClicked();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onFabNewSessionClicked() {
