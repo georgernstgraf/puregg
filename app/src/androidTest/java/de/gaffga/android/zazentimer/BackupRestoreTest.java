@@ -3,19 +3,17 @@ package de.gaffga.android.zazentimer;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import de.gaffga.android.zazentimer.screens.MainPage;
-
-import static org.junit.Assert.assertTrue;
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ZazenTimerActivityTest {
+public class BackupRestoreTest {
 
     @Rule
     public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
