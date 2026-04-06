@@ -52,6 +52,8 @@
     <string name="bell_name_8">Jap. Rhinbowl, 97mm</string>
     <string name="bell_pause">Bell gap (sec)</string>
     <string name="bell_user">Add Bell...</string>
+    <string name="bottom_nav_about">About</string>
+    <string name="bottom_nav_sessions">Sessions</string>
     <string name="bottom_sheet_behavior">android.support.design.widget.BottomSheetBehavior</string>
     <string name="but_pause">Pause</string>
     <string name="but_start">Start Meditation</string>

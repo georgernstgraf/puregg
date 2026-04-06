@@ -3,6 +3,7 @@ package de.gaffga.android.zazentimer;
 import android.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -27,8 +28,10 @@ import androidx.lifecycle.ViewModelProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import de.gaffga.android.fragments.MainFragment;
 import de.gaffga.android.zazentimer.audio.BellCollection;
 import de.gaffga.android.zazentimer.bo.Section;
@@ -149,8 +152,30 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         }
         NavController nc = getNavController();
         if (nc != null) {
-            appBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment).build();
+            appBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.mainFragment, R.id.settingsFragment, R.id.aboutFragment)
+                    .build();
             NavigationUI.setupActionBarWithNavController(this, nc, appBarConfiguration);
+            BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+            if (bottomNav != null) {
+                NavigationUI.setupWithNavController(bottomNav, nc);
+            }
+            nc.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+                @Override
+                public void onDestinationChanged(NavController controller,
+                        NavDestination destination, Bundle arguments) {
+                    if (bottomNav != null) {
+                        int destId = destination.getId();
+                        if (destId == R.id.mainFragment
+                                || destId == R.id.settingsFragment
+                                || destId == R.id.aboutFragment) {
+                            bottomNav.setVisibility(View.VISIBLE);
+                        } else {
+                            bottomNav.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            });
         }
         observeViewModel();
         if (preferences.getBoolean(PREF_KEY_FIRST_START, true)) {
@@ -327,10 +352,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.menu_about:
-                Log.d(TAG, "about");
-                showAboutScreen();
-                return true;
             case R.id.menu_copy_session:
                 Log.d(TAG, "duplicate session");
                 int selectedSessionId = getSelectedSessionId();
@@ -388,10 +409,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
             case R.id.menu_session_edit_help:
             default:
                 return super.onOptionsItemSelected(menuItem);
-            case R.id.menu_settings:
-                Log.d(TAG, "settings");
-                showSettingsScreen();
-                return true;
         }
     }
 
