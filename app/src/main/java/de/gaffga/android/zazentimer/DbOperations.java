@@ -31,7 +31,7 @@ public class DbOperations {
     private void openDatabase() {
         this.appDb = Room.databaseBuilder(context,
                 AppDatabase.class, AppDatabase.DATABASE_NAME)
-                .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3, AppDatabase.MIGRATION_3_4)
+                .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3, AppDatabase.MIGRATION_3_4, AppDatabase.MIGRATION_4_5)
                 .addCallback(AppDatabase.ON_CREATE_CALLBACK)
                 .allowMainThreadQueries()
                 .build();

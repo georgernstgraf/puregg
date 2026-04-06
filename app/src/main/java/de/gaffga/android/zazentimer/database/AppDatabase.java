@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {SessionEntity.class, SectionEntity.class}, version = 4, exportSchema = false)
+@Database(entities = {SessionEntity.class, SectionEntity.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "zentimer";
 
@@ -55,6 +55,23 @@ public abstract class AppDatabase extends RoomDatabase {
             db.execSQL("ALTER TABLE sessions_new RENAME TO sessions");
 
             db.execSQL("CREATE TABLE sections_new (_id INTEGER PRIMARY KEY AUTOINCREMENT, fk_session INTEGER NOT NULL, name TEXT NOT NULL, duration INTEGER NOT NULL, bell INTEGER NOT NULL, rank INTEGER, bellcount INTEGER, bellpause INTEGER, belluri TEXT, volume INTEGER DEFAULT 100, FOREIGN KEY (fk_session) REFERENCES sessions(_id) ON DELETE CASCADE)");
+            db.execSQL("INSERT INTO sections_new SELECT * FROM sections");
+            db.execSQL("DROP TABLE sections");
+            db.execSQL("ALTER TABLE sections_new RENAME TO sections");
+
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_sections_fk_session ON sections(fk_session)");
+        }
+    };
+
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE sessions_new (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT NOT NULL)");
+            db.execSQL("INSERT INTO sessions_new SELECT * FROM sessions");
+            db.execSQL("DROP TABLE sessions");
+            db.execSQL("ALTER TABLE sessions_new RENAME TO sessions");
+
+            db.execSQL("CREATE TABLE sections_new (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, fk_session INTEGER NOT NULL, name TEXT NOT NULL, duration INTEGER NOT NULL, bell INTEGER NOT NULL, rank INTEGER, bellcount INTEGER, bellpause INTEGER, belluri TEXT, volume INTEGER DEFAULT 100, FOREIGN KEY (fk_session) REFERENCES sessions(_id) ON DELETE CASCADE)");
             db.execSQL("INSERT INTO sections_new SELECT * FROM sections");
             db.execSQL("DROP TABLE sections");
             db.execSQL("ALTER TABLE sections_new RENAME TO sections");
