@@ -352,56 +352,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.menu_copy_session:
-                Log.d(TAG, "duplicate session");
-                int selectedSessionId = getSelectedSessionId();
-                int duplicateSession = dbOperations.duplicateSession(selectedSessionId, getString(R.string.copy_prefix) + " " + dbOperations.readSession(selectedSessionId).name);
-                MainFragment mainFrag = findMainFragment();
-                if (mainFrag != null) {
-                    mainFrag.updateSessionList();
-                    mainFrag.setSelectedSessionId(duplicateSession);
-                }
-                return true;
-            case R.id.menu_delete_session:
-                Log.d(TAG, "delete session");
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.title_question_delete_session);
-                builder.setMessage(R.string.text_question_delete_session);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dbOperations.deleteSession(ZazenTimerActivity.this.getSelectedSessionId());
-                        MainFragment f = ZazenTimerActivity.this.findMainFragment();
-                        if (f != null) {
-                            f.updateSessionList();
-                            f.selectLastSession();
-                        }
-                    }
-                });
-                builder.setNegativeButton(R.string.abbrechen, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.create().show();
-                return true;
-            case R.id.menu_edit_session:
-                Log.d(TAG, "edit session");
-                showSessionEditFragment(getSelectedSessionId());
-                return true;
-            case R.id.menu_new_session:
-                Log.d(TAG, "new session");
-                Session session = new Session();
-                session.name = "";
-                session.description = "";
-                dbOperations.insertSession(session);
-                MainFragment mainFrag2 = findMainFragment();
-                if (mainFrag2 != null) {
-                    mainFrag2.updateSessionList();
-                    mainFrag2.setSelectedSessionId(session.id);
-                }
-                showSessionEditFragment(session.id);
-                return true;
             case R.id.menu_privacy:
                 Log.d(TAG, "privacy");
                 showPrivacyScreen();
@@ -419,18 +369,6 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         if (nc != null && nc.getCurrentDestination() != null
                 && nc.getCurrentDestination().getId() == R.id.mainFragment) {
             getMenuInflater().inflate(R.menu.main_menu, menu);
-        }
-        MenuItem findItem = menu.findItem(R.id.menu_copy_session);
-        if (findItem != null) {
-            findItem.setEnabled(getSelectedSessionId() != -1);
-        }
-        MenuItem findItem2 = menu.findItem(R.id.menu_delete_session);
-        if (findItem2 != null) {
-            findItem2.setEnabled(getSelectedSessionId() != -1);
-        }
-        MenuItem findItem3 = menu.findItem(R.id.menu_edit_session);
-        if (findItem3 != null) {
-            findItem3.setEnabled(getSelectedSessionId() != -1);
         }
         return super.onPrepareOptionsMenu(menu);
     }

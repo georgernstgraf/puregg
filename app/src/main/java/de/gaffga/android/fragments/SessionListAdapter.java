@@ -1,8 +1,11 @@
 package de.gaffga.android.fragments;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,26 +19,40 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
     private List<SessionWithTimeInfo> items = new ArrayList<>();
     private int selectedPosition = -1;
     private final OnItemClickListener clickListener;
+    private final OnSessionActionListener actionListener;
 
     public interface OnItemClickListener {
         void onItemClick(int position, SessionWithTimeInfo session);
+    }
+
+    public interface OnSessionActionListener {
+        void onEditSession(int position);
+        void onCopySession(int position);
+        void onDeleteSession(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView sessionName;
         final TextView sessionDescription;
         final TextView sessionDuration;
+        final ImageButton sessionOverflow;
 
         ViewHolder(View view) {
             super(view);
             sessionName = view.findViewById(R.id.sessionName);
             sessionDescription = view.findViewById(R.id.sessionDescription);
             sessionDuration = view.findViewById(R.id.sessionDuration);
+            sessionOverflow = view.findViewById(R.id.sessionOverflow);
         }
     }
 
     public SessionListAdapter(OnItemClickListener clickListener) {
+        this(clickListener, null);
+    }
+
+    public SessionListAdapter(OnItemClickListener clickListener, OnSessionActionListener actionListener) {
         this.clickListener = clickListener;
+        this.actionListener = actionListener;
     }
 
     @NonNull
@@ -78,6 +95,33 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             if (clickListener != null) {
                 clickListener.onItemClick(selectedPosition, items.get(selectedPosition));
             }
+        });
+
+        holder.sessionOverflow.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(v.getContext(), v);
+            popup.getMenuInflater().inflate(R.menu.menu_session_card_actions, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    int pos = holder.getAdapterPosition();
+                    if (pos == RecyclerView.NO_POSITION || actionListener == null) {
+                        return false;
+                    }
+                    int id = menuItem.getItemId();
+                    if (id == R.id.card_action_edit) {
+                        actionListener.onEditSession(pos);
+                        return true;
+                    } else if (id == R.id.card_action_copy) {
+                        actionListener.onCopySession(pos);
+                        return true;
+                    } else if (id == R.id.card_action_delete) {
+                        actionListener.onDeleteSession(pos);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            popup.show();
         });
     }
 

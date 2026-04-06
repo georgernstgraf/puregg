@@ -149,6 +149,7 @@
     <string name="sekunden">Sekunden</string>
     <string name="select_audio">Audiodatei auswählen</string>
     <string name="service_description">Eine laufende Zazen Meditation</string>
+    <string name="content_desc_session_actions">Sitzungsaktionen</string>
     <string name="session_list_unnamed_entry">Sitzung ohne Namen</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="test_mute_perm_request">Die App hat keine Berechtigung das Telefon stumm zu schalten. Einstellungen öffnen um dies zu ändern?</string>

@@ -1,30 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/but_start"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:minWidth="140dp"
-        android:minHeight="80dp"
-        android:text="@string/but_start"
-        android:layout_alignParentBottom="true"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_sessions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_above="@+id/but_start"
-        android:layout_alignParentTop="false"
-        android:layout_centerHorizontal="false"/>
-    <ImageView
-        android:padding="40dp"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/but_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:minWidth="140dp"
+            android:minHeight="80dp"
+            android:text="@string/but_start"
+            android:layout_alignParentBottom="true"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_sessions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_above="@+id/but_start"
+            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="false"/>
+
+        <ImageView
+            android:padding="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:layout_above="@+id/recycler_sessions"
+            style="@style/zenIcon"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_new_session"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
-        android:layout_above="@+id/recycler_sessions"
-        style="@style/zenIcon"/>
-</RelativeLayout>
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_plus"
+        android:contentDescription="@string/menu_new_session"
+        app:layout_anchor="@id/recycler_sessions"
+        app:layout_anchorGravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

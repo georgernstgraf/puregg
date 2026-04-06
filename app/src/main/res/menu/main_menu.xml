@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@android:drawable/ic_menu_edit"
-        android:id="@+id/menu_edit_session"
-        android:title="@string/menu_edit_session"
-        app:showAsAction="never"/>
-    <item
-        android:icon="@android:drawable/ic_menu_add"
-        android:id="@+id/menu_new_session"
-        android:title="@string/menu_new_session"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/menu_copy_session"
-        android:title="@string/menu_copy_session"/>
-    <item
-        android:icon="@android:drawable/ic_menu_delete"
-        android:id="@+id/menu_delete_session"
-        android:title="@string/menu_delete_session"
-        app:showAsAction="never"/>
-    <item
         android:icon="@android:drawable/ic_menu_info_details"
         android:id="@+id/menu_privacy"
         android:title="@string/menu_privacy"

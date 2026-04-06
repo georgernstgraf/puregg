@@ -1,9 +1,11 @@
 package de.gaffga.android.fragments;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.gaffga.android.base.SpinnerUtil;
 import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
@@ -26,6 +29,7 @@ import javax.inject.Inject;
 public class MainFragment extends Fragment {
     private static final String TAG = "ZMT_MainFragment";
     private Button butStart;
+    private FloatingActionButton fabNewSession;
     private Context context;
     private RecyclerView recyclerSessions;
     private boolean mAttached;
@@ -57,6 +61,7 @@ public class MainFragment extends Fragment {
         Log.d(TAG, "onCreateView");
         View inflate = layoutInflater.inflate(R.layout.fragment_main, viewGroup, false);
         this.butStart = (Button) inflate.findViewById(R.id.but_start);
+        this.fabNewSession = (FloatingActionButton) inflate.findViewById(R.id.fab_new_session);
         this.recyclerSessions = (RecyclerView) inflate.findViewById(R.id.recycler_sessions);
         this.butStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,17 +69,89 @@ public class MainFragment extends Fragment {
                 MainFragment.this.mListener.onStartPressed();
             }
         });
-        this.recyclerSessions.setLayoutManager(new LinearLayoutManager(this.context));
-        this.sessionListAdapter = new SessionListAdapter(new SessionListAdapter.OnItemClickListener() {
+        this.fabNewSession.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(int position, SessionWithTimeInfo session) {
-                Session s = sessions.get(position);
-                MainFragment.this.selectedSessionId = s.id;
-                MainFragment.this.pref.edit().putInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, s.id).apply();
+            public void onClick(View view) {
+                MainFragment.this.onFabNewSessionClicked();
             }
         });
+        this.recyclerSessions.setLayoutManager(new LinearLayoutManager(this.context));
+        this.sessionListAdapter = new SessionListAdapter(
+            new SessionListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position, SessionWithTimeInfo session) {
+                    Session s = sessions.get(position);
+                    MainFragment.this.selectedSessionId = s.id;
+                    MainFragment.this.pref.edit().putInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, s.id).apply();
+                }
+            },
+            new SessionListAdapter.OnSessionActionListener() {
+                @Override
+                public void onEditSession(int position) {
+                    MainFragment.this.onCardEditSession(position);
+                }
+
+                @Override
+                public void onCopySession(int position) {
+                    MainFragment.this.onCardCopySession(position);
+                }
+
+                @Override
+                public void onDeleteSession(int position) {
+                    MainFragment.this.onCardDeleteSession(position);
+                }
+            }
+        );
         this.recyclerSessions.setAdapter(this.sessionListAdapter);
         return inflate;
+    }
+
+    private void onFabNewSessionClicked() {
+        Session session = new Session();
+        session.name = "";
+        session.description = "";
+        dbOperations.insertSession(session);
+        updateSessionList();
+        setSelectedSessionId(session.id);
+        navigateToSessionEdit(session.id);
+    }
+
+    private void onCardEditSession(int position) {
+        if (position < 0 || position >= sessions.size()) return;
+        Session s = sessions.get(position);
+        navigateToSessionEdit(s.id);
+    }
+
+    private void onCardCopySession(int position) {
+        if (position < 0 || position >= sessions.size()) return;
+        Session s = sessions.get(position);
+        int newId = dbOperations.duplicateSession(s.id,
+            getString(R.string.copy_prefix) + " " + s.name);
+        updateSessionList();
+        setSelectedSessionId(newId);
+    }
+
+    private void onCardDeleteSession(int position) {
+        if (position < 0 || position >= sessions.size()) return;
+        Session s = sessions.get(position);
+        new AlertDialog.Builder(requireContext())
+            .setTitle(R.string.title_question_delete_session)
+            .setMessage(R.string.text_question_delete_session)
+            .setPositiveButton(R.string.ok, (dialog, which) -> {
+                dbOperations.deleteSession(s.id);
+                updateSessionList();
+                selectLastSession();
+            })
+            .setNegativeButton(R.string.abbrechen, (dialog, which) -> {})
+            .create()
+            .show();
+    }
+
+    private void navigateToSessionEdit(int sessionId) {
+        Bundle args = new Bundle();
+        args.putInt("sessionId", sessionId);
+        Navigation.findNavController(getView()).navigate(
+            R.id.action_mainFragment_to_sessionEditFragment, args);
     }
 
     @Override
