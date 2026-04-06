@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="de.gaffga.android.fragments.MainFragment"
-        android:label="Main">
+        android:label="Sessions">
         <action
             android:id="@+id/action_mainFragment_to_meditationFragment"
             app:destination="@id/meditationFragment"
@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/sessionEditFragment"
         android:name="de.gaffga.android.fragments.SessionEditFragment"
-        android:label="Session Edit">
+        android:label="Edit Session">
         <action
             android:id="@+id/action_sessionEditFragment_to_sectionEditFragment"
             app:destination="@id/sectionEditFragment"
@@ -61,7 +61,7 @@
     <fragment
         android:id="@+id/sectionEditFragment"
         android:name="de.gaffga.android.fragments.SectionEditFragment"
-        android:label="Section Edit" />
+        android:label="Edit Section" />
 
     <fragment
         android:id="@+id/settingsFragment"

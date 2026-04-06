@@ -3,8 +3,9 @@ package de.gaffga.android.zazentimer;
 import android.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -93,6 +94,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     private boolean appRunning = false;
     private Handler handler;
     private NavController navController;
+    private AppBarConfiguration appBarConfiguration;
 
     @Inject DbOperations dbOperations;
 
@@ -144,6 +146,11 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+        }
+        NavController nc = getNavController();
+        if (nc != null) {
+            appBarConfiguration = new AppBarConfiguration.Builder(R.id.mainFragment).build();
+            NavigationUI.setupActionBarWithNavController(this, nc, appBarConfiguration);
         }
         observeViewModel();
         if (preferences.getBoolean(PREF_KEY_FIRST_START, true)) {
@@ -236,6 +243,15 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         if (nc == null || !nc.popBackStack()) {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController nc = getNavController();
+        if (nc != null && appBarConfiguration != null) {
+            return NavigationUI.navigateUp(nc, appBarConfiguration);
+        }
+        return super.onSupportNavigateUp();
     }
 
     public boolean isMeditationScreenShown() {
