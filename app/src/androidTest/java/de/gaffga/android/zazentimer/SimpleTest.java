@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +20,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 @LargeTest
 public class SimpleTest {
 
-    @Rule
+    @Rule(order = 0)
     public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
 
-    @Rule
+    @Rule(order = 1)
     public ActivityScenarioRule<ZazenTimerActivity> activityRule =
             new ActivityScenarioRule<>(ZazenTimerActivity.class);
+
+    @Before
+    public void init() {
+        hiltRule.inject(this);
+    }
 
     @Test
     public void testActivityLaunches() {
