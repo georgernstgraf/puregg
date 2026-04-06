@@ -1,5 +1,7 @@
 package de.gaffga.android.zazentimer.database;
 
+import android.database.Cursor;
+
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
@@ -33,7 +35,31 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final Migration MIGRATION_3_4 = new Migration(3, 4) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase db) {
-            db.execSQL("ALTER TABLE sections ADD COLUMN volume INTEGER DEFAULT 100");
+            Cursor cursor = db.query("PRAGMA table_info(sections)");
+            boolean hasVolume = false;
+            int nameIndex = cursor.getColumnIndex("name");
+            while (cursor.moveToNext()) {
+                if ("volume".equals(cursor.getString(nameIndex))) {
+                    hasVolume = true;
+                    break;
+                }
+            }
+            cursor.close();
+            if (!hasVolume) {
+                db.execSQL("ALTER TABLE sections ADD COLUMN volume INTEGER DEFAULT 100");
+            }
+
+            db.execSQL("CREATE TABLE sessions_new (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT NOT NULL)");
+            db.execSQL("INSERT INTO sessions_new SELECT * FROM sessions");
+            db.execSQL("DROP TABLE sessions");
+            db.execSQL("ALTER TABLE sessions_new RENAME TO sessions");
+
+            db.execSQL("CREATE TABLE sections_new (_id INTEGER PRIMARY KEY AUTOINCREMENT, fk_session INTEGER NOT NULL, name TEXT NOT NULL, duration INTEGER NOT NULL, bell INTEGER NOT NULL, rank INTEGER, bellcount INTEGER, bellpause INTEGER, belluri TEXT, volume INTEGER DEFAULT 100, FOREIGN KEY (fk_session) REFERENCES sessions(_id) ON DELETE CASCADE)");
+            db.execSQL("INSERT INTO sections_new SELECT * FROM sections");
+            db.execSQL("DROP TABLE sections");
+            db.execSQL("ALTER TABLE sections_new RENAME TO sections");
+
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_sections_fk_session ON sections(fk_session)");
         }
     };
 

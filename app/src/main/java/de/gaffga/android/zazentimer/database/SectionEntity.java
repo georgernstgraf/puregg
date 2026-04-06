@@ -1,5 +1,6 @@
 package de.gaffga.android.zazentimer.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -12,6 +13,7 @@ public class SectionEntity {
     @PrimaryKey(autoGenerate = true)
     public int _id;
     public int fk_session;
+    @NonNull
     public String name;
     public int duration;
     public int bell;
