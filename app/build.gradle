@@ -12,7 +12,7 @@ android {
         versionCode 33
         versionName "2.20"
         
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "de.gaffga.android.zazentimer.HiltTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
