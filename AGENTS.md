@@ -14,4 +14,5 @@ If `HANDOFF.md` contains open tasks, complete them before starting
 ## Project-Specific Constraints
 - **Trunk-based development.** Commit directly to `main`. No branches, no PRs.
 - Agent work is considered complete only if the application successfully starts in the emulator.
+- **The main agent must not create any code.** Its sole task is to orchestrate sub-agents that solve sub-issues. Delegate all implementation work to Task agents.
 
