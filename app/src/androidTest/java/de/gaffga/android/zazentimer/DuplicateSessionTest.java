@@ -1,5 +1,9 @@
 package de.gaffga.android.zazentimer;
 
+import android.view.View;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import org.hamcrest.Matcher;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -13,10 +17,11 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static org.hamcrest.Matchers.containsString;
 
 @HiltAndroidTest
@@ -39,10 +44,7 @@ public class DuplicateSessionTest {
     @Test
     public void testDuplicateSessionDoesNotCrash() {
         onView(withId(R.id.recycler_sessions))
-                .perform(actionOnItemAtPosition(0, click()));
-
-        onView(withId(R.id.sessionOverflow))
-                .perform(click());
+                .perform(actionOnItemAtPosition(0, clickChildViewWithId(R.id.sessionOverflow)));
 
         onView(withText(R.string.menu_copy_session))
                 .perform(click());
@@ -53,13 +55,35 @@ public class DuplicateSessionTest {
 
     @Test
     public void testDuplicateSessionCreatesCopyWithPrefix() {
-        onView(withId(R.id.sessionOverflow))
-                .perform(click());
+        onView(withId(R.id.recycler_sessions))
+                .perform(actionOnItemAtPosition(0, clickChildViewWithId(R.id.sessionOverflow)));
 
         onView(withText(R.string.menu_copy_session))
                 .perform(click());
 
         onView(withText(containsString("Copy of")))
                 .check(matches(isDisplayed()));
+    }
+
+    private static ViewAction clickChildViewWithId(final int id) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(View.class);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Click child view with id " + id;
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                View child = view.findViewById(id);
+                if (child != null) {
+                    child.performClick();
+                }
+            }
+        };
     }
 }
