@@ -14,6 +14,8 @@ android {
         
         testInstrumentationRunner "de.gaffga.android.zazentimer.HiltTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        buildConfigField "String", "GIT_HASH", "\"${'git rev-parse --short=7 HEAD'.execute([], rootProject.rootDir).text.trim()}\""
     }
 
     buildTypes {
@@ -29,6 +31,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 

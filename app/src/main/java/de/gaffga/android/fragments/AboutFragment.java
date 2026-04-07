@@ -1,7 +1,6 @@
 package de.gaffga.android.fragments;
 
 import androidx.fragment.app.Fragment;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.google.android.material.transition.MaterialFadeThrough;
+import de.gaffga.android.zazentimer.BuildConfig;
 import de.gaffga.android.zazentimer.R;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -38,13 +38,7 @@ public class AboutFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack();
             }
         });
-        String str = "App-Version: ??";
-        try {
-            str = "App-Version: " + getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        ((TextView) inflate.findViewById(R.id.version)).setText(str);
+        ((TextView) inflate.findViewById(R.id.version)).setText("Build: " + BuildConfig.GIT_HASH);
         return inflate;
     }
 }
