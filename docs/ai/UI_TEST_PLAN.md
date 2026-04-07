@@ -14,6 +14,7 @@ It serves as the single source of truth for UI test coverage.
 | `SimpleTest.java` | `testActivityLaunches()` | 🟢 |
 | `ZazenTimerActivityTest.java` | `activityLaunchesSuccessfully()`, `testFreshAppLaunch()` | 🟢 |
 | `BackupRestoreTest.java` | `testBackupCreatesValidZip()`, `testRestoreFromZip()` | 🟢 |
+| `DuplicateSessionTest.java` | `testDuplicateSessionDoesNotCrash()`, `testDuplicateSessionCreatesCopyWithPrefix()` | 🟢 |
 | `utils/DatabaseIdlingResource.java` | (utility, not a test) | — |
 
 ## 1. Startup & Main Screen
@@ -26,7 +27,7 @@ It serves as the single source of truth for UI test coverage.
 ## 2. Session Management (Main Screen Options)
 | Scenario | Description / Steps | Expected Outcome | Regressions / Bugs | Automated |
 | :--- | :--- | :--- | :--- | :--- |
-| **Copy Session** | Select Session -> Menu -> "Copy Session" | A duplicate session is created with "(Copy)" suffix and selected in the list | | 🔴 |
+| **Copy Session** | Select Session -> Menu -> "Copy Session" | A duplicate session is created with "(Copy)" suffix and selected in the list | #52 SQLiteConstraintException on duplicate (fixed: reset source.id=0) | 🟢 |
 | **Delete Session** | Select Session -> Menu -> "Delete Session" -> Confirm | Session is removed from the database and UI list | | 🔴 |
 | **Delete Cancel** | Select Session -> Menu -> "Delete Session" -> Cancel | Deletion is aborted; Session remains in list | | 🔴 |
 
@@ -51,7 +52,7 @@ It serves as the single source of truth for UI test coverage.
 ## 5. UI Bug Regression Tests (#37)
 | Scenario | Description / Steps | Expected Outcome | Regressions / Bugs | Automated |
 | :--- | :--- | :--- | :--- | :--- |
-| **Duplicate Session** | Select session -> card overflow -> "Copy" | Duplicate session created with "(Copy)" suffix; original unchanged | #37/#39 Crash from reusing old PKs (both session.id and section.id must be reset to 0) | 🔴 |
+| **Duplicate Session** | Select session -> card overflow -> "Copy" | Duplicate session created with "(Copy)" suffix; original unchanged | #37/#39 Crash from reusing old PKs (both session.id and section.id must be reset to 0) | 🟢 |
 | **Back Arrow Navigation** | Navigate to meditation -> press toolbar back arrow | Returns to session list without crash | #37/#40 onBackPressed() bypassed fragment callbacks; popUpToInclusive=true cleared back stack | 🔴 |
 | **Back Arrow from Edit** | Navigate to Session Edit -> press toolbar back arrow | Returns to session list without crash | #37/#40 Same root cause as above | 🔴 |
 | **Stop Meditation Confirmation** | Start meditation -> press Stop button | Confirmation dialog appears; Cancel continues, Confirm stops | #37/#41 Stop button bypassed showStopConfirmationDialog() | 🔴 |

@@ -73,6 +73,7 @@ public class DbOperations {
     public int duplicateSession(int sourceId, String newName) {
         Session source = readSession(sourceId);
         source.name = newName;
+        source.id = 0;
         Section[] sections = readSections(sourceId);
         insertSession(source);
         for (Section section : sections) {

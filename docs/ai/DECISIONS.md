@@ -70,3 +70,9 @@
 - **Reason**: The app targets API 29-34 but used APIs deprecated/removed in the target range. `startForegroundService()` is required since API 26 for foreground services. Raw string service names are fragile. `onActivityResult` is deprecated since API 30.
 - **Considered**: Keeping `onActivityResult` with `@SuppressWarnings`; using `ContextCompat.startForegroundService()`.
 - **Tradeoff**: Activity Result API requires registering launchers before `onCreate` completes (field initializers work fine). Removes 3 `onActivityResult` overrides across 3 files. No functional changes.
+
+## 2026-04-07: Duplicate Session Fix (#52)
+- **Choice**: Added `source.id = 0;` before `insertSession(source)` in `DbOperations.duplicateSession()`, plus an Espresso instrumented test (`DuplicateSessionTest.java`) that exercises the overflow-menu duplicate action.
+- **Reason**: The method reused the original session's `_id` (primary key), causing `SQLiteConstraintException` on `@Insert`. Room's `@PrimaryKey(autoGenerate = true)` only auto-generates when the value is 0.
+- **Considered**: Using `@Insert(onConflict = REPLACE)` instead of resetting the ID.
+- **Tradeoff**: Resetting to 0 is more correct (creates a truly new row vs. silently overwriting). Test covers both crash regression and "Copy of" prefix verification.

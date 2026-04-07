@@ -1,3 +1,4 @@
+## Completed
 - [x] #10 UX fixes (Settings crash, flattened preferences), gRPC JWT token generation, and UI Test Plan creation.
 - [x] #8 Startup crash
 - [x] #6 Meditation start crash (PendingIntent mutability and FGS permissions)
@@ -18,18 +19,19 @@
   - [x] #34 FAB and per-session contextual actions
   - [x] #35 Back-press confirmation during meditation
   - [x] #36 Material Motion transitions
+- [x] #51 Illustrated app documentation: 15 screenshots across 12 screens
+- [x] #52 Fix Duplicate Session crash (SQLiteConstraintException on sessions._id) + instrumented test
 
 ## Completed (this session)
-- [x] #51 (partial) Illustrated app documentation: 15 screenshots across 12 screens, 380-line APP_DOCUMENTATION.md
-- [x] Discovered bug: Duplicate Session crash (SQLiteConstraintException on sessions._id)
-- [x] Added `docs/app-docs/logcat.txt` to `.gitignore`
+- [x] #52 Fix Duplicate Session crash: added `source.id = 0` in `DbOperations.duplicateSession()`
+- [x] #52 Created `DuplicateSessionTest.java` with 2 instrumented tests
+- [x] Updated `UI_TEST_PLAN.md` — Duplicate/Copy Session rows 🔴→🟢
 
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
-- [ ] Create fix issue for Duplicate Session crash (DbOperations.duplicateSession reuses _id)
 
 ## Blockers
 - None
 
 ## Next Session Suggestion
-Rerun emulator screen capture with full `adb logcat` (not PID-filtered) to capture all app logs and correlate warnings/exceptions with specific screens. Also create a bug issue for the Duplicate Session crash found during exploration.
+Rerun emulator screen capture with full `adb logcat` (not PID-filtered) to capture all app logs and correlate warnings/exceptions with specific screens (#51 remaining work).
