@@ -38,7 +38,7 @@ public class AboutFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack();
             }
         });
-        ((TextView) inflate.findViewById(R.id.version)).setText("Build: " + BuildConfig.GIT_HASH);
+        ((TextView) inflate.findViewById(R.id.version)).setText("Commit: " + BuildConfig.GIT_HASH);
         return inflate;
     }
 }
