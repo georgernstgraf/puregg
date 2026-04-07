@@ -1,6 +1,6 @@
 # Architecture
 
-Living structural map of the system as of 2026-04-06.
+Living structural map of the system as of 2026-04-07.
 Overwritten when structural changes occur during a session.
 
 ## Overview

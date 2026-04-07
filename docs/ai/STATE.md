@@ -24,10 +24,16 @@
 
 ## Completed (this session)
 - [x] #52 Fix DuplicateSessionTest AmbiguousViewMatcherException (scoped overflow click to RecyclerView item via `clickChildViewWithId`)
-- [x] CI: Added release APK artifact with consistent signing via GitHub Secrets
+- [x] #53 CI: Added release APK artifact with consistent signing via GitHub Secrets
   - Keystore stored as `RELEASE_KEYSTORE_BASE64` (+ `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`)
   - Release APK signed with same key every build — users can upgrade in-place
   - Three artifacts: `app-debug`, `app-release`, `test-results`
+- [x] #53 Dead code cleanup: removed 36 tracked files, 3738 lines
+  - 6 crash log files, 3 unused layouts, 12 unused drawables, 3 unused Java classes (primarrays)
+  - Dead BundleUtil chain (4 files) + `@SaveToBundle` annotations from Section.java/Session.java
+  - Dead `ServerMessage.java` + `serverMessages` field from ZazenTimerActivity
+  - Unused `values/drawables.xml`
+  - Updated `.gitignore`: added `*crash*.txt`, removed stale `gradle-7.5/` and `docs/app-docs/logcat.txt`
 
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
