@@ -6,8 +6,8 @@
         android:title="@string/menu_privacy"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/menu_add_session"
-        android:icon="@drawable/ic_plus"
-        android:title="@string/menu_add_session"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:id="@+id/menu_about"
+        android:title="@string/menu_about"
         app:showAsAction="never"/>
 </menu>

@@ -9,16 +9,8 @@
         android:name="de.gaffga.android.fragments.MainFragment"
         android:label="Sessions">
         <action
-            android:id="@+id/action_mainFragment_to_meditationFragment"
-            app:destination="@id/meditationFragment"
-            app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_mainFragment_to_sessionEditFragment"
             app:destination="@id/sessionEditFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_mainFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
@@ -52,10 +44,4 @@
         android:id="@+id/aboutFragment"
         android:name="de.gaffga.android.fragments.AboutFragment"
         android:label="About" />
-
-    <action
-        android:id="@+id/action_global_meditationFragment"
-        app:destination="@id/meditationFragment"
-        app:popUpTo="@id/mainFragment"
-        app:popUpToInclusive="false" />
 </navigation>

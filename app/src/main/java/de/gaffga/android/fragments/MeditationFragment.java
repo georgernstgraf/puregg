@@ -3,6 +3,7 @@ package de.gaffga.android.fragments;
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,11 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.app.AlertDialog;
 import com.google.android.material.transition.MaterialSharedAxis;
+import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
+import de.gaffga.android.zazentimer.ZazenTimerActivity;
+import de.gaffga.android.zazentimer.bo.Session;
+import de.gaffga.android.zazentimer.service.MeditationService;
 import de.gaffga.android.zazentimer.service.MeditationUiState;
 import de.gaffga.android.zazentimer.service.MeditationViewModel;
 import de.gaffga.android.zazentimer.views.TimerView;
 import dagger.hilt.android.AndroidEntryPoint;
+import javax.inject.Inject;
 
 @AndroidEntryPoint
 public class MeditationFragment extends Fragment {
@@ -29,6 +35,10 @@ public class MeditationFragment extends Fragment {
     private MeditationViewModel viewModel;
     private boolean meditationRunning = false;
     private OnBackPressedCallback backPressedCallback;
+    private TimerView timerView;
+
+    @Inject
+    DbOperations dbOperations;
 
     public MeditationFragment() {
     }
@@ -45,17 +55,27 @@ public class MeditationFragment extends Fragment {
         View inflate = layoutInflater.inflate(R.layout.fragment_meditation, viewGroup, false);
         this.butStop = (ImageButton) inflate.findViewById(R.id.but_stop);
         this.butPause = (ImageButton) inflate.findViewById(R.id.but_pause);
+        this.timerView = (TimerView) inflate.findViewById(R.id.timerView);
         this.butStop.setOnClickListener(view -> MeditationFragment.this.showStopConfirmationDialog());
         this.butPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MeditationFragment.this.viewModel != null) {
-                    MeditationFragment.this.viewModel.pauseMeditation();
+                if (MeditationFragment.this.meditationRunning) {
+                    if (MeditationFragment.this.viewModel != null) {
+                        MeditationFragment.this.viewModel.pauseMeditation();
+                    }
+                    MeditationFragment.this.updateButtons();
+                } else {
+                    MeditationFragment.this.startMeditationFromIdle();
                 }
-                MeditationFragment.this.updateButtons();
             }
         });
-        updateButtons();
+        if (!MeditationService.isServiceRunning()) {
+            showIdleState();
+        } else {
+            showRunningState();
+            updateButtons();
+        }
         return inflate;
     }
 
@@ -63,6 +83,9 @@ public class MeditationFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
+        if (!MeditationService.isServiceRunning()) {
+            showIdleState();
+        }
     }
 
     @Override
@@ -99,13 +122,13 @@ public class MeditationFragment extends Fragment {
                 if (backPressedCallback != null) {
                     backPressedCallback.setEnabled(false);
                 }
+                showIdleState();
                 return;
             }
             meditationRunning = true;
             if (backPressedCallback != null) {
                 backPressedCallback.setEnabled(true);
             }
-            TimerView timerView = (TimerView) view.findViewById(R.id.timerView);
             if (timerView != null) {
                 timerView.setCurrentStartSeconds(state.currentStartSeconds);
                 timerView.setNumTotalSeconds(state.totalSessionTime);
@@ -116,8 +139,61 @@ public class MeditationFragment extends Fragment {
                 timerView.setSessionElapsedSeconds(state.sessionElapsedSeconds);
                 timerView.setSectionNames(state.currentSectionName, state.nextSectionName, state.nextNextSectionName);
             }
+            showRunningState();
             updateButtons();
         });
+    }
+
+    private void showIdleState() {
+        if (timerView != null) {
+            timerView.setCurrentStartSeconds(0);
+            timerView.setNumTotalSeconds(0);
+            timerView.setNextEndSeconds(0);
+            timerView.setNextStartSeconds(0);
+            timerView.setPrevStartSeconds(0);
+            timerView.setSectionElapsedSeconds(0);
+            timerView.setSessionElapsedSeconds(0);
+            SharedPreferences prefs = ZazenTimerActivity.getPreferences(requireContext());
+            int sessionId = prefs.getInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, -1);
+            if (sessionId != -1 && dbOperations != null) {
+                Session session = dbOperations.readSession(sessionId);
+                if (session != null) {
+                    timerView.setSectionNamesNoAnim(session.name, "");
+                } else {
+                    timerView.setSectionNamesNoAnim("", "");
+                }
+            } else {
+                timerView.setSectionNamesNoAnim("", "");
+            }
+        }
+        if (butStop != null) {
+            butStop.setVisibility(View.GONE);
+        }
+        if (butPause != null) {
+            butPause.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow_white_48dp));
+        }
+    }
+
+    private void showRunningState() {
+        if (butStop != null) {
+            butStop.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void startMeditationFromIdle() {
+        SharedPreferences prefs = ZazenTimerActivity.getPreferences(requireContext());
+        int sessionId = prefs.getInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, -1);
+        if (sessionId == -1) {
+            return;
+        }
+        if (dbOperations.readSections(sessionId).length == 0) {
+            return;
+        }
+        viewModel.setSelectedSessionId(sessionId);
+        ZazenTimerActivity activity = (ZazenTimerActivity) getActivity();
+        if (activity != null) {
+            activity.startMeditation();
+        }
     }
 
     private void showStopConfirmationDialog() {
@@ -138,6 +214,10 @@ public class MeditationFragment extends Fragment {
 
     public void updateButtons() {
         if (this.butPause == null || getActivity() == null) {
+            return;
+        }
+        if (!meditationRunning) {
+            this.butPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_white_48dp));
             return;
         }
         if (this.viewModel != null && this.viewModel.isPaused()) {

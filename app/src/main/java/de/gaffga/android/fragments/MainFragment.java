@@ -11,9 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -55,7 +52,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setHasOptionsMenu(true);
         setEnterTransition(new MaterialFadeThrough());
         Log.d(TAG, "onCreate");
     }
@@ -101,20 +97,6 @@ public class MainFragment extends Fragment {
         );
         this.recyclerSessions.setAdapter(this.sessionListAdapter);
         return inflate;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_add_session) {
-            onFabNewSessionClicked();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void onFabNewSessionClicked() {

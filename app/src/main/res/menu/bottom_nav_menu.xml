@@ -5,11 +5,11 @@
         android:icon="@android:drawable/ic_menu_view"
         android:title="@string/bottom_nav_sessions" />
     <item
+        android:id="@+id/meditationFragment"
+        android:icon="@drawable/ic_play_arrow_white_48dp"
+        android:title="@string/bottom_nav_meditation" />
+    <item
         android:id="@+id/settingsFragment"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/menu_settings" />
-    <item
-        android:id="@+id/aboutFragment"
-        android:icon="@android:drawable/ic_menu_info_details"
-        android:title="@string/bottom_nav_about" />
 </menu>

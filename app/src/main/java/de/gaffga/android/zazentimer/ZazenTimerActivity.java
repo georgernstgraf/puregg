@@ -152,7 +152,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         NavController nc = getNavController();
         if (nc != null) {
             appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.mainFragment, R.id.settingsFragment, R.id.aboutFragment)
+                    R.id.mainFragment, R.id.meditationFragment, R.id.settingsFragment, R.id.aboutFragment)
                     .build();
             NavigationUI.setupActionBarWithNavController(this, nc, appBarConfiguration);
             BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -165,12 +165,10 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
                         NavDestination destination, Bundle arguments) {
                     if (bottomNav != null) {
                         int destId = destination.getId();
-                        if (destId == R.id.mainFragment
-                                || destId == R.id.settingsFragment
-                                || destId == R.id.aboutFragment) {
-                            bottomNav.setVisibility(View.VISIBLE);
-                        } else {
+                        if (destId == R.id.sessionEditFragment || destId == R.id.sectionEditFragment) {
                             bottomNav.setVisibility(View.GONE);
+                        } else {
+                            bottomNav.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -285,21 +283,18 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void showSettingsScreen() {
-        NavController nc = getNavController();
-        if (nc == null) return;
-        nc.navigate(R.id.action_mainFragment_to_settingsFragment);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.settingsFragment);
     }
 
     public void showMeditationScreen() {
-        NavController nc = getNavController();
-        if (nc == null) return;
-        nc.navigate(R.id.action_global_meditationFragment);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.meditationFragment);
     }
 
     public void showMainScreen() {
-        NavController nc = getNavController();
-        if (nc == null) return;
-        nc.popBackStack(R.id.mainFragment, false);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.mainFragment);
     }
 
     public void showSessionEditFragment(int sessionId) {
@@ -346,6 +341,12 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
             case R.id.menu_privacy:
                 Log.d(TAG, "privacy");
                 showPrivacyScreen();
+                return true;
+            case R.id.menu_about:
+                NavController nc = getNavController();
+                if (nc != null) {
+                    nc.navigate(R.id.action_mainFragment_to_aboutFragment);
+                }
                 return true;
             case R.id.menu_session_edit_help:
             default:
