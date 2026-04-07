@@ -17,6 +17,7 @@ import com.google.android.material.transition.MaterialSharedAxis;
 import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
+import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.bo.Session;
 import de.gaffga.android.zazentimer.service.MeditationService;
 import de.gaffga.android.zazentimer.service.MeditationUiState;
@@ -147,7 +148,6 @@ public class MeditationFragment extends Fragment {
     private void showIdleState() {
         if (timerView != null) {
             timerView.setCurrentStartSeconds(0);
-            timerView.setNumTotalSeconds(0);
             timerView.setNextEndSeconds(0);
             timerView.setNextStartSeconds(0);
             timerView.setPrevStartSeconds(0);
@@ -158,11 +158,19 @@ public class MeditationFragment extends Fragment {
             if (sessionId != -1 && dbOperations != null) {
                 Session session = dbOperations.readSession(sessionId);
                 if (session != null) {
+                    Section[] sections = dbOperations.readSections(sessionId);
+                    int totalSeconds = 0;
+                    for (Section s : sections) {
+                        totalSeconds += s.duration;
+                    }
+                    timerView.setNumTotalSeconds(totalSeconds);
                     timerView.setSectionNamesNoAnim(session.name, "");
                 } else {
+                    timerView.setNumTotalSeconds(0);
                     timerView.setSectionNamesNoAnim("", "");
                 }
             } else {
+                timerView.setNumTotalSeconds(0);
                 timerView.setSectionNamesNoAnim("", "");
             }
         }
