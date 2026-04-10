@@ -54,14 +54,13 @@ Overflow menu --[About]--> AlertDialog
 | Class | Table | Fields |
 |-------|-------|--------|
 | `Session` | `sessions` | id, name, description |
-| `Section` | `sections` | id, name, duration (seconds), bell, bellUri, bellcount (1-5), bellpause (1-15), volume (0-100), rank, fkSession |
+| `Section` | `sections` | id, name, duration (seconds), bell, bellUri, bellcount (1-5), bellpause (1-15), volume (0-100, 100=full), rank, fkSession |
 
 ## Database Layer
 - **Room** — `AppDatabase` (version 5), entities: `SessionEntity`, `SectionEntity`
 - **`DbOperations`** — `@Singleton` via Hilt, wraps Room DAOs for CRUD operations
 - **`SessionDao` / `SectionDao`** — Room DAOs with `@Query`, `@Insert`, `@Update`, `@Delete`
 - **Migrations**: 1→2 (settings table), 2→3 (no-op), 3→4 (volume column), 4→5 (recreate tables with explicit NOT NULL)
-- Tables: `sessions`, `sections`, `settings` (legacy, migrated to SharedPreferences)
 
 ## Build Config
 - `BuildConfig.GIT_HASH` — 7-character Git commit hash, injected at build time via `git rev-parse --short=7 HEAD` in `build.gradle`. Used in About dialog.
@@ -93,15 +92,15 @@ User presses Start (Sessions tab or Meditation tab)
 | `MeditationServiceBinder` | `service/` | Binder exposing MeditationService to Activity |
 | `ServCon` | `service/` | ServiceConnection proxy for Activity ↔ Service communication |
 | `SectionEndReceiver` | `service/` | Static BroadcastReceiver for alarm-fired section-end events |
-| `Audio` | `audio/` | MediaPlayer-based bell playback with volume management |
+| `Audio` | `audio/` | MediaPlayer-based bell playback on STREAM_ALARM with per-section dimming |
 | `BellCollection` | `audio/` | Singleton: 8 built-in bells + custom bell scanning |
-| `VolumeCalc` | `audio/` | Calculates system stream vs. MediaPlayer volume split |
 | `TimerView` | `views/` | Custom circular arc timer widget with section visualization |
 | `SessionListAdapter` | `fragments/` | RecyclerView adapter for session cards with selection tracking |
 | `HiltTestRunner` | androidTest | Custom AndroidJUnitRunner that injects HiltTestApplication |
 
 ## Data Flows
 - **AlarmManager.setAlarmClock()** → SectionEndReceiver → MeditationService → Meditation.onSectionEnd() → Audio.playBell()
+- **Bell playback volume:** System STREAM_ALARM volume (set by user) × section dimming (`MediaPlayer.setVolume(volume/100f)`)
 - **UI updates:** Handler.postDelayed (300ms polling) reads Meditation state → TimerView
 - **Preferences:** SharedPreferences via PreferenceManager → read in Activity/Service/Fragments
 - **Database:** DbOperations → Room DAOs → SessionEntity/SectionEntity → Session/Section BOs

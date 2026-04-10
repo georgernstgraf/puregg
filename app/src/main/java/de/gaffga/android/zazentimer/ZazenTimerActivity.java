@@ -53,13 +53,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     public static final boolean PREF_DEFAULT_FIRST_START = true;
     public static final boolean PREF_DEFAULT_KEEP_SCREEN_ON = false;
     public static final int PREF_DEFAULT_LAST_SESSION = -1;
-    public static final boolean PREF_DEFAULT_MUTE_ALARM = true;
     public static final boolean PREF_DEFAULT_MUTE_MODE_NONE = true;
     public static final boolean PREF_DEFAULT_MUTE_MODE_VIBRATE = false;
     public static final boolean PREF_DEFAULT_MUTE_MODE_VIBRATE_SOUND = false;
-    public static final boolean PREF_DEFAULT_MUTE_MUSIC = false;
-    public static final boolean PREF_DEFAULT_OUTPUT_CHANNEL_ALARM = true;
-    public static final boolean PREF_DEFAULT_OUTPUT_CHANNEL_MUSIC = false;
     public static final boolean PREF_DEFAULT_PHONE_OFF = true;
     public static final boolean PREF_DEFAULT_SHOW_ELAPSED_TIME = true;
     public static final boolean PREF_DEFAULT_SHOW_SESSION_EDIT_HELP_V13 = false;
@@ -72,13 +68,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     public static final String PREF_KEY_FIRST_START = "first_start";
     public static final String PREF_KEY_KEEP_SCREEN_ON = "keep_screen_on";
     public static final String PREF_KEY_LAST_SESSION = "last_session";
-    public static final String PREF_KEY_MUTE_ALARM = "mute_alarm";
     public static final String PREF_KEY_MUTE_MODE_NONE = "mute_mode_none";
     public static final String PREF_KEY_MUTE_MODE_VIBRATE = "mute_mode_vibrate";
     public static final String PREF_KEY_MUTE_MODE_VIBRATE_SOUND = "mute_mode_vibrate_sound";
-    public static final String PREF_KEY_MUTE_MUSIC = "mute_music";
-    public static final String PREF_KEY_OUTPUT_CHANNEL_ALARM = "pref_output_channel_alarm";
-    public static final String PREF_KEY_OUTPUT_CHANNEL_MUSIC = "pref_output_channel_music";
     public static final String PREF_KEY_PHONE_OFF = "phone_off";
     public static final String PREF_KEY_SHOW_ELAPSED_TIME = "show_elapsed_time";
     public static final String PREF_KEY_SHOW_SESSION_EDIT_HELP_V13 = "session_edit_help_13";
@@ -565,9 +557,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         }
         if (this.pref.contains(PREF_KEY_PHONE_OFF)) {
             if (this.pref.getBoolean(PREF_KEY_PHONE_OFF, true)) {
-                this.pref.edit().putBoolean(PREF_KEY_MUTE_MODE_VIBRATE_SOUND, false).putBoolean(PREF_KEY_MUTE_MODE_VIBRATE, false).putBoolean(PREF_KEY_MUTE_MODE_NONE, true).putBoolean(PREF_KEY_MUTE_ALARM, true).putBoolean(PREF_KEY_MUTE_MUSIC, false).putBoolean(PREF_KEY_OUTPUT_CHANNEL_ALARM, true).putBoolean(PREF_KEY_OUTPUT_CHANNEL_MUSIC, false).remove(PREF_KEY_PHONE_OFF).apply();
+                this.pref.edit().putBoolean(PREF_KEY_MUTE_MODE_VIBRATE_SOUND, false).putBoolean(PREF_KEY_MUTE_MODE_VIBRATE, false).putBoolean(PREF_KEY_MUTE_MODE_NONE, true).remove(PREF_KEY_PHONE_OFF).apply();
             } else {
-                this.pref.edit().putBoolean(PREF_KEY_MUTE_MODE_VIBRATE_SOUND, true).putBoolean(PREF_KEY_MUTE_MODE_VIBRATE, false).putBoolean(PREF_KEY_MUTE_MODE_NONE, false).putBoolean(PREF_KEY_MUTE_ALARM, false).putBoolean(PREF_KEY_MUTE_MUSIC, false).putBoolean(PREF_KEY_OUTPUT_CHANNEL_ALARM, true).putBoolean(PREF_KEY_OUTPUT_CHANNEL_MUSIC, false).remove(PREF_KEY_PHONE_OFF).apply();
+                this.pref.edit().putBoolean(PREF_KEY_MUTE_MODE_VIBRATE_SOUND, true).putBoolean(PREF_KEY_MUTE_MODE_VIBRATE, false).putBoolean(PREF_KEY_MUTE_MODE_NONE, false).remove(PREF_KEY_PHONE_OFF).apply();
             }
         }
     }
@@ -596,7 +588,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void resetSettingsForTest() {
-        getPreferences(this).edit().putBoolean(PREF_KEY_MUTE_MODE_VIBRATE_SOUND, false).putBoolean(PREF_KEY_MUTE_MODE_VIBRATE, false).putBoolean(PREF_KEY_MUTE_MODE_NONE, true).putBoolean(PREF_KEY_MUTE_ALARM, true).putBoolean(PREF_KEY_MUTE_MUSIC, false).putBoolean(PREF_KEY_OUTPUT_CHANNEL_ALARM, true).putBoolean(PREF_KEY_OUTPUT_CHANNEL_MUSIC, false).apply();
+        getPreferences(this).edit().putBoolean(PREF_KEY_MUTE_MODE_VIBRATE_SOUND, false).putBoolean(PREF_KEY_MUTE_MODE_VIBRATE, false).putBoolean(PREF_KEY_MUTE_MODE_NONE, true).apply();
     }
 
     public void resetDatabaseForTest() {

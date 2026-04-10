@@ -28,6 +28,14 @@
   - Fix 1: `MeditationViewModel.stopUpdateThread()` now clears LiveData to null
   - Fix 2: `MeditationFragment.showIdleState()` now resets `meditationRunning = false`
   - All 6 instrumented tests pass, app launches cleanly on emulator
+- [x] #56 Volume system simplification
+  - Deleted `VolumeCalc.java` and `VolumeInfo.java` (net -195 lines)
+  - Simplified `Audio.java`: removed VolumeCalc split, output channel selection, save/restore stream volume, log curve
+  - Bell playback now uses STREAM_ALARM at `MediaPlayer.setVolume(section.volume/100f)`
+  - Removed output channel preferences (Alarm/Music) and channel muting (mute_alarm/mute_music)
+  - Per-section volume UI inverted to "Dim bell" semantics (0=full, 100=silent), DB column unchanged
+  - Added `VolumeDimmingTest` unit test (7 test cases)
+  - Build, unit tests, and androidTest APK all pass
 
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen

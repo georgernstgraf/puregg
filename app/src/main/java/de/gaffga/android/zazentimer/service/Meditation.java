@@ -27,8 +27,6 @@ public class Meditation {
     private int currentSectionIdx;
     private MeditationService meditationService;
     private PowerManager.WakeLock meditationWakeLock;
-    private int oldAlarmVolume;
-    private int oldMusicVolume;
     private int oldRingerMode;
     private int oldRingerVolume;
     private int pauseSectionSeconds;
@@ -302,8 +300,6 @@ public class Meditation {
         boolean z = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MODE_VIBRATE_SOUND, false);
         boolean z2 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MODE_VIBRATE, false);
         boolean z3 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MODE_NONE, true);
-        boolean z4 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_ALARM, true);
-        boolean z5 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MUSIC, false);
         AudioManager audioManager = (AudioManager) this.meditationService.getSystemService(Context.AUDIO_SERVICE);
         if (!z) {
             if (z2) {
@@ -322,14 +318,6 @@ public class Meditation {
                 audioManager.setRingerMode(0);
             }
         }
-        if (z4) {
-            this.oldAlarmVolume = audioManager.getStreamVolume(4);
-            audioManager.setStreamVolume(4, 0, 0);
-        }
-        if (z5) {
-            this.oldMusicVolume = audioManager.getStreamVolume(3);
-            audioManager.setStreamVolume(3, 0, 0);
-        }
     }
 
     private void unmutePhone() {
@@ -337,8 +325,6 @@ public class Meditation {
         boolean z = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MODE_VIBRATE_SOUND, false);
         boolean z2 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MODE_VIBRATE, false);
         boolean z3 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MODE_NONE, true);
-        boolean z4 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_ALARM, true);
-        boolean z5 = this.pref.getBoolean(ZazenTimerActivity.PREF_KEY_MUTE_MUSIC, false);
         AudioManager audioManager = (AudioManager) this.meditationService.getSystemService(Context.AUDIO_SERVICE);
         if (!z && (z2 || z3)) {
             Log.d(TAG, "unmuting: ring=" + this.oldRingerVolume + " ringerMode=" + this.oldRingerMode);
@@ -351,14 +337,6 @@ public class Meditation {
                 audioManager.setStreamVolume(2, this.oldRingerVolume, 0);
             }
             audioManager.setRingerMode(this.oldRingerMode);
-        }
-        if (z4) {
-            Log.d(TAG, "unmuting: alarm=" + this.oldAlarmVolume);
-            audioManager.setStreamVolume(4, this.oldAlarmVolume, 0);
-        }
-        if (z5) {
-            Log.d(TAG, "unmuting: music=" + this.oldMusicVolume);
-            audioManager.setStreamVolume(3, this.oldMusicVolume, 0);
         }
     }
 

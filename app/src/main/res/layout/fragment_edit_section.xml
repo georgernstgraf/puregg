@@ -171,7 +171,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_volume_bells"
+            android:text="@string/title_dim_bell"
             style="@style/captionTextView"/>
         <SeekBar
             android:id="@+id/sectionGongVolume"
@@ -180,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="100"
-            android:progress="40"
+            android:progress="0"
             android:layout_weight="1"/>
         <TextView
             android:layout_width="match_parent"

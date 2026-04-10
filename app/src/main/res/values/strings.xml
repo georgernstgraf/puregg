@@ -194,4 +194,7 @@
     <string name="stop_meditation_message">Your meditation session is still running.</string>
     <string name="stop_meditation_stop">Stop</string>
     <string name="stop_meditation_cancel">Cancel</string>
+    <string name="pref_title_bell_volume">Bell Volume</string>
+    <string name="pref_desc_bell_volume">Controls the alarm stream volume for bell sounds</string>
+    <string name="title_dim_bell">Dim Bell</string>
 </resources>

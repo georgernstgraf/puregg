@@ -151,7 +151,7 @@ public class SectionEditFragment extends Fragment {
         this.section.bell = -2;
         Bell bell = (Bell) binding.selectGongSound.getSelectedItem();
         this.section.bellUri = bell.getUri().toString();
-        this.section.volume = binding.sectionGongVolume.getProgress();
+        this.section.volume = 100 - binding.sectionGongVolume.getProgress();
         this.section.name = binding.sectionName.getText().toString();
         this.section.duration = (this.durationMinutes * 60) + this.durationSeconds;
     }
@@ -160,7 +160,7 @@ public class SectionEditFragment extends Fragment {
         setViewBellCount(this.section.bellcount);
         setViewGap(this.section.bellpause);
         binding.sectionGongVolume.setMax(100);
-        binding.sectionGongVolume.setProgress(this.section.volume);
+        binding.sectionGongVolume.setProgress(100 - this.section.volume);
         binding.sectionName.setText(this.section.name);
         setDurationMinutes(this.section.duration / 60);
         setDurationSeconds(this.section.duration % 60);
@@ -309,7 +309,7 @@ public class SectionEditFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                SectionEditFragment.this.section.volume = SectionEditFragment.this.binding.sectionGongVolume.getProgress();
+                SectionEditFragment.this.section.volume = 100 - SectionEditFragment.this.binding.sectionGongVolume.getProgress();
                 if (BellCollection.getInstance().getBellForSection(SectionEditFragment.this.section) != null) {
                     SectionEditFragment.this.audio.playAbsVolume(SectionEditFragment.this.section);
                 }

@@ -41,17 +41,12 @@ Business rules and domain relationships not obvious from code.
 - **Vibrate Only** (`mute_mode_vibrate`): Mute ringer, keep vibrate.
 - **Silent** (`mute_mode_none`): Mute ringer and vibrate (default).
 
-## Audio Output Channels (mutually exclusive)
-- **Alarm Stream** (`pref_output_channel_alarm`, default): Uses `STREAM_ALARM` for bell playback.
-- **Music Stream** (`pref_output_channel_music`): Uses `STREAM_MUSIC` for bell playback.
-
 ## Volume System
-- Master volume preference (0-100) from SeekBarPreference.
-- Per-section volume (0-100) from Section config.
-- Effective volume = section volume × master volume / 100.
-- `VolumeCalc` splits effective volume between system stream volume and MediaPlayer volume using logarithmic scaling.
-- `Audio` sets the system stream volume to the minimum needed, then uses MediaPlayer volume for fine control.
-- Original stream volumes are saved before meditation and restored after.
+- Bell audio always uses `AudioManager.STREAM_ALARM` (hard-coded, no channel selection).
+- **System volume**: User controls alarm stream volume via Settings slider (or Android volume buttons). The app does not modify system stream volume during bell playback.
+- **Per-section dimming**: Each section has a `volume` field (0-100 in DB, where 100=full loudness). The UI presents this as "Dim bell" (inverted: 0=full, 100=silent). Bell playback uses `MediaPlayer.setVolume(volume/100f)`.
+- No master volume multiplier — the Settings "Bell Volume" slider directly controls the system alarm stream volume.
+- Original stream volumes are saved before meditation and restored after (ringer only, not alarm/music channels).
 
 ## Timer Display (TimerView)
 - Custom circular arc showing session progress.

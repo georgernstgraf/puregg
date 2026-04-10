@@ -90,28 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-        final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(ZazenTimerActivity.PREF_KEY_OUTPUT_CHANNEL_ALARM);
-        final CheckBoxPreference checkBoxPreference2 = (CheckBoxPreference) findPreference(ZazenTimerActivity.PREF_KEY_OUTPUT_CHANNEL_MUSIC);
-        checkBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object obj) {
-                if (!((Boolean) obj).booleanValue()) {
-                    return checkBoxPreference2.isChecked();
-                }
-                checkBoxPreference2.setChecked(false);
-                return true;
-            }
-        });
-        checkBoxPreference2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object obj) {
-                if (!((Boolean) obj).booleanValue()) {
-                    return checkBoxPreference.isChecked();
-                }
-                checkBoxPreference.setChecked(false);
-                return true;
-            }
-        });
+
         final CheckBoxPreference checkBoxPreference3 = (CheckBoxPreference) findPreference(ZazenTimerActivity.PREF_KEY_MUTE_MODE_VIBRATE_SOUND);
         final CheckBoxPreference checkBoxPreference4 = (CheckBoxPreference) findPreference(ZazenTimerActivity.PREF_KEY_MUTE_MODE_VIBRATE);
         final CheckBoxPreference checkBoxPreference5 = (CheckBoxPreference) findPreference(ZazenTimerActivity.PREF_KEY_MUTE_MODE_NONE);
