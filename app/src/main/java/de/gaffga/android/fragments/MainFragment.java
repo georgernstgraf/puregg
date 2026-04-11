@@ -19,6 +19,7 @@ import com.google.android.material.transition.MaterialFadeThrough;
 import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
+import de.gaffga.android.zazentimer.service.MeditationService;
 import de.gaffga.android.zazentimer.bo.Section;
 import de.gaffga.android.zazentimer.bo.Session;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -37,6 +38,7 @@ public class MainFragment extends Fragment {
     private SessionListAdapter sessionListAdapter;
     private ArrayList<Session> sessions = new ArrayList<>();
     private int selectedSessionId = -1;
+    private boolean interactionsEnabled = true;
 
     @Inject DbOperations dbOperations;
 
@@ -73,6 +75,7 @@ public class MainFragment extends Fragment {
             new SessionListAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position, SessionWithTimeInfo session) {
+                    if (!interactionsEnabled) return;
                     Session s = sessions.get(position);
                     MainFragment.this.selectedSessionId = s.id;
                     MainFragment.this.pref.edit().putInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, s.id).apply();
@@ -100,6 +103,7 @@ public class MainFragment extends Fragment {
     }
 
     private void onFabNewSessionClicked() {
+        if (!interactionsEnabled) return;
         Session session = new Session();
         session.name = "";
         session.description = "";
@@ -110,12 +114,14 @@ public class MainFragment extends Fragment {
     }
 
     private void onCardEditSession(int position) {
+        if (!interactionsEnabled) return;
         if (position < 0 || position >= sessions.size()) return;
         Session s = sessions.get(position);
         navigateToSessionEdit(s.id);
     }
 
     private void onCardCopySession(int position) {
+        if (!interactionsEnabled) return;
         if (position < 0 || position >= sessions.size()) return;
         Session s = sessions.get(position);
         int newId = dbOperations.duplicateSession(s.id,
@@ -125,6 +131,7 @@ public class MainFragment extends Fragment {
     }
 
     private void onCardDeleteSession(int position) {
+        if (!interactionsEnabled) return;
         if (position < 0 || position >= sessions.size()) return;
         Session s = sessions.get(position);
         new AlertDialog.Builder(requireContext())
@@ -186,6 +193,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        interactionsEnabled = !MeditationService.isServiceRunning();
+        updateSessionInteractions();
         Log.d(TAG, "onResume");
         getActivity().invalidateOptionsMenu();
         updateSessionList();
@@ -200,6 +209,13 @@ public class MainFragment extends Fragment {
         Log.d(TAG, "LAST_SELECTED_SESSION was idx=" + positionById + " id=" + i);
         this.selectedSessionId = i;
         this.sessionListAdapter.setSelectedPosition(positionById);
+    }
+
+    private void updateSessionInteractions() {
+        if (butStart != null) {
+            butStart.setEnabled(interactionsEnabled);
+            butStart.setAlpha(interactionsEnabled ? 1.0f : 0.4f);
+        }
     }
 
     public void updateSessionList() {

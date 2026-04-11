@@ -11,6 +11,7 @@ public class MeditationUiState {
     public final String currentSectionName;
     public final String nextSectionName;
     public final String nextNextSectionName;
+    public final String sessionName;
     public final boolean paused;
     public final boolean running;
 
@@ -18,6 +19,7 @@ public class MeditationUiState {
             int nextEndSeconds, int nextStartSeconds, int prevStartSeconds,
             int sectionElapsedSeconds, int sessionElapsedSeconds,
             String currentSectionName, String nextSectionName, String nextNextSectionName,
+            String sessionName,
             boolean paused, boolean running) {
         this.currentStartSeconds = currentStartSeconds;
         this.totalSessionTime = totalSessionTime;
@@ -29,6 +31,7 @@ public class MeditationUiState {
         this.currentSectionName = currentSectionName;
         this.nextSectionName = nextSectionName;
         this.nextNextSectionName = nextNextSectionName;
+        this.sessionName = sessionName;
         this.paused = paused;
         this.running = running;
     }

@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import de.gaffga.android.zazentimer.DbOperations;
 import de.gaffga.android.zazentimer.R;
+import de.gaffga.android.zazentimer.bo.Session;
 import de.gaffga.android.zazentimer.ZazenTimerActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 import javax.inject.Inject;
@@ -98,7 +99,8 @@ public class MeditationService extends Service {
             Log.d(TAG, "startMeditation(): Meditation seems to be already running!");
             return;
         }
-        this.runningMeditation = new Meditation(this, dbOperations.readSections(i));
+        Session session = dbOperations.readSession(i);
+        this.runningMeditation = new Meditation(this, session.name, dbOperations.readSections(i));
         this.runningMeditation.start();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             startForeground(1, createNotification(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);

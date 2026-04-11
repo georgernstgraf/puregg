@@ -13,7 +13,16 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:elevation="4dp" />
+            app:elevation="4dp">
+            <ImageView
+                android:id="@+id/zenIndicator"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start|center_vertical"
+                android:src="?attr/zenIconSrc"
+                android:visibility="gone"
+                android:paddingEnd="8dp" />
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

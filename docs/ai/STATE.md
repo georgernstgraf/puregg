@@ -22,20 +22,18 @@
 - [x] #51 Illustrated app documentation: 15 screenshots across 12 screens
 - [x] #52 Fix Duplicate Session crash (SQLiteConstraintException on sessions._id) + instrumented test
 
-## Completed (this session)
+## Completed (previous sessions)
 - [x] #55 Fix corrupted meditation state after natural finish
-  - Root cause: stale `meditationState` LiveData (`running=true`) in activity-scoped ViewModel survived fragment recreation
-  - Fix 1: `MeditationViewModel.stopUpdateThread()` now clears LiveData to null
-  - Fix 2: `MeditationFragment.showIdleState()` now resets `meditationRunning = false`
-  - All 6 instrumented tests pass, app launches cleanly on emulator
 - [x] #56 Volume system simplification
-  - Deleted `VolumeCalc.java` and `VolumeInfo.java` (net -195 lines)
-  - Simplified `Audio.java`: removed VolumeCalc split, output channel selection, save/restore stream volume, log curve
-  - Bell playback now uses STREAM_ALARM at `MediaPlayer.setVolume(section.volume/100f)`
-  - Removed output channel preferences (Alarm/Music) and channel muting (mute_alarm/mute_music)
-  - Per-section volume UI inverted to "Dim bell" semantics (0=full, 100=silent), DB column unchanged
-  - Added `VolumeDimmingTest` unit test (7 test cases)
-  - Build, unit tests, and androidTest APK all pass
+
+## In Progress (this session)
+- [ ] #57 Show session name on meditation screen and meditation-in-progress indicator in toolbar
+  - **Feature 1 (done)**: Session name below progress ring in dedicated `TextView` (`sessionNameText`), visible in all states (idle/running/paused). Idle state shows colored section arcs with first section name in the ring (no longer shows session name inside TimerView).
+  - **Feature 2 (done)**: Zen circle `ImageView` (`zenIndicator`) in toolbar, toggled based on `MeditationService.isServiceRunning()`.
+  - **Feature 3 (done)**: Sessions screen blocks all interactions during running meditation (card selection, Start button, Edit/Copy/Delete, FAB).
+  - **Idle state redesign**: `MeditationViewModel.emitIdleState()` builds full `MeditationUiState(running=false)` with section arc data from `Section[]`. Never emits null. `MeditationFragment` has three-branch observer (idle/running/paused). Idle shows greyed stop button.
+  - **Files modified**: `MeditationUiState.java`, `Meditation.java`, `MeditationService.java`, `MeditationViewModel.java`, `MeditationFragment.java`, `MainFragment.java`, `ZazenTimerActivity.java`, `fragment_meditation.xml` (portrait + landscape), `main.xml`
+  - **Status**: Build passes (`./gradlew build` + `assembleDebugAndroidTest`). Needs device testing before closing.
 
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
@@ -44,4 +42,4 @@
 - None
 
 ## Next Session Suggestion
-Rerun emulator screen capture with full `adb logcat` (not PID-filtered) to capture all app logs and correlate warnings/exceptions with specific screens (#51 remaining work).
+Test #57 on device/emulator, then close the issue if all features work correctly.

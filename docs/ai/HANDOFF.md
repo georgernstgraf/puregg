@@ -1,1 +1,1 @@
-No pending tasks. Last cleared: 2026-04-10.
+1. [ ] #57 — Device/emulator testing needed before closing. All code changes committed, build passes. Three features to verify: (a) session name below progress ring in idle/running/paused, (b) zen circle indicator in toolbar during meditation, (c) Sessions screen interactions blocked during meditation.

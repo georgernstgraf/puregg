@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import de.gaffga.android.fragments.MainFragment;
@@ -90,6 +91,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     private Handler handler;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
+    private ImageView zenIndicator;
 
     @Inject DbOperations dbOperations;
 
@@ -142,6 +144,7 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+        zenIndicator = findViewById(R.id.zenIndicator);
         NavController nc = getNavController();
         if (nc != null) {
             appBarConfiguration = new AppBarConfiguration.Builder(
@@ -207,6 +210,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     @Override
     protected void onResume() {
         super.onResume();
+        if (zenIndicator != null) {
+            zenIndicator.setVisibility(MeditationService.isServiceRunning() ? View.VISIBLE : View.GONE);
+        }
         Log.d(TAG, "onResume");
         this.appRunning = true;
         ContextCompat.registerReceiver(this, this.meditationEndReceiver, new IntentFilter(MeditationService.ZAZENTIMER_SESSION_ENDED), ContextCompat.RECEIVER_NOT_EXPORTED);
@@ -332,6 +338,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         viewModel.startMeditation((Application) getApplicationContext(), getSelectedSessionId());
         showMeditationScreen();
         viewModel.startUpdateThread();
+        if (zenIndicator != null) {
+            zenIndicator.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -532,6 +541,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void serviceMeditationEndNotify() {
+        if (zenIndicator != null) {
+            zenIndicator.setVisibility(View.GONE);
+        }
         viewModel.notifyMeditationEnded();
     }
 

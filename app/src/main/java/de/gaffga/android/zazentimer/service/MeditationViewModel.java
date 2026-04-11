@@ -51,6 +51,7 @@ public class MeditationViewModel extends AndroidViewModel {
         super(application);
         this.dbOperations = dbOperations;
         meditationEnded.setValue(false);
+        emitIdleState();
     }
 
     public LiveData<MeditationUiState> getMeditationState() {
@@ -136,7 +137,70 @@ public class MeditationViewModel extends AndroidViewModel {
         if (this.handler != null) {
             this.handler.removeCallbacks(this.updateRunnable);
         }
-        meditationState.setValue(null);
+        emitIdleState();
+    }
+
+    public void emitIdleState() {
+        int sessionId = this.selectedSessionId;
+        if (sessionId == -1) {
+            SharedPreferences prefs = ZazenTimerActivity.getPreferences(getApplication());
+            sessionId = prefs.getInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, -1);
+        }
+        if (sessionId == -1 || dbOperations == null) {
+            meditationState.setValue(new MeditationUiState(
+                    0, 0, 0, 0, 0, 0, 0,
+                    "", "", "",
+                    "",
+                    false, false
+            ));
+            return;
+        }
+        de.gaffga.android.zazentimer.bo.Session session = dbOperations.readSession(sessionId);
+        if (session == null) {
+            meditationState.setValue(new MeditationUiState(
+                    0, 0, 0, 0, 0, 0, 0,
+                    "", "", "",
+                    "",
+                    false, false
+            ));
+            return;
+        }
+        de.gaffga.android.zazentimer.bo.Section[] sections = dbOperations.readSections(sessionId);
+        if (sections == null || sections.length == 0) {
+            meditationState.setValue(new MeditationUiState(
+                    0, 0, 0, 0, 0, 0, 0,
+                    "", "", "",
+                    session.name,
+                    false, false
+            ));
+            return;
+        }
+        int totalSessionTime = 0;
+        for (de.gaffga.android.zazentimer.bo.Section s : sections) {
+            totalSessionTime += s.duration;
+        }
+        int currentStartSeconds = 0;
+        int nextEndSeconds = sections.length > 1 ? sections[0].duration + sections[1].duration : totalSessionTime;
+        int nextStartSeconds = sections[0].duration;
+        int prevStartSeconds = 0;
+        String currentSectionName = sections[0].name;
+        String nextSectionName = sections.length > 1 ? sections[1].name : "";
+        String nextNextSectionName = sections.length > 2 ? sections[2].name : "";
+        meditationState.setValue(new MeditationUiState(
+                currentStartSeconds,
+                totalSessionTime,
+                nextEndSeconds,
+                nextStartSeconds,
+                prevStartSeconds,
+                0,
+                0,
+                currentSectionName,
+                nextSectionName,
+                nextNextSectionName,
+                session.name,
+                false,
+                false
+        ));
     }
 
     private void pollMeditationState() {
@@ -163,6 +227,7 @@ public class MeditationViewModel extends AndroidViewModel {
                     meditation.getCurrentSectionName(),
                     meditation.getNextSectionName(),
                     meditation.getNextNextSectionName(),
+                    meditation.getSessionName(),
                     meditation.isPaused(),
                     true
             );
@@ -180,6 +245,7 @@ public class MeditationViewModel extends AndroidViewModel {
                 meditation.getCurrentSectionName(),
                 meditation.getNextSectionName(),
                 meditation.getNextNextSectionName(),
+                meditation.getSessionName(),
                 meditation.isPaused(),
                 true
         );

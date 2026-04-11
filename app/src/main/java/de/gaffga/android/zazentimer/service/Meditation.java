@@ -31,6 +31,7 @@ public class Meditation {
     private int oldRingerVolume;
     private int pauseSectionSeconds;
     private boolean paused;
+    private final String sessionName;
     private final SharedPreferences pref;
     private long sectionStartTime;
     private Section[] sections;
@@ -40,11 +41,12 @@ public class Meditation {
     private boolean started = false;
     private final ExecutorService bellExecutor = Executors.newSingleThreadExecutor();
 
-    public Meditation(MeditationService meditationService, Section[] sectionArr) {
+    public Meditation(MeditationService meditationService, String sessionName, Section[] sectionArr) {
         this.stopping = false;
         this.paused = false;
         this.totalSessionTime = 0;
         this.currentSectionIdx = -1;
+        this.sessionName = sessionName;
         this.sections = sectionArr;
         this.meditationService = meditationService;
         this.pref = ZazenTimerActivity.getPreferences(meditationService);
@@ -57,6 +59,8 @@ public class Meditation {
             this.totalSessionTime += section.duration;
         }
     }
+
+    public String getSessionName() { return this.sessionName; }
 
     public void start() {
         if (this.started) {

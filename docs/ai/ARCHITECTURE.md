@@ -1,6 +1,6 @@
 # Architecture
 
-Living structural map of the system as of 2026-04-07.
+Living structural map of the system as of 2026-04-11.
 Overwritten when structural changes occur during a session.
 
 ## Overview
@@ -20,7 +20,7 @@ Android meditation timer (ZazenTimer) targeting API 29-35.
 | Fragment | Nav Label | Role |
 |----------|-----------|------|
 | `MainFragment` | Sessions | Session list (RecyclerView cards) + Start button |
-| `MeditationFragment` | Meditation | Dual-state: idle (paused at 00:00) or running meditation |
+| `MeditationFragment` | Meditation | Three-state: idle, running, paused |
 | `SessionEditFragment` | Edit Session | Edit session name/description + section list |
 | `SectionEditFragment` | Edit Section | Edit section duration, bell, volume, gap |
 | `SettingsFragment` | Settings | Preferences via PreferenceFragmentCompat |
@@ -41,9 +41,13 @@ Overflow menu --[About]--> AlertDialog
 ```
 
 **MeditationFragment states:**
-- **Idle** (no running service): TimerView shows 00:00 with selected session's total duration and name. Play button starts meditation.
-- **Running** (service active): Live timer with Pause/Stop. Back press shows stop confirmation.
-- Session selection persists via `PREF_KEY_LAST_SESSION` in SharedPreferences. Idle state re-reads on every `onResume()`.
+- **Idle** (`running=false`): TimerView shows colored section arcs (from ViewModel's `emitIdleState()`). First section name in ring, session name in dedicated `TextView`. Greyed stop button. Play button starts meditation. No back-press interception.
+- **Running** (`running=true, paused=false`): Live timer with Pause/Stop. Full color stop button. Back press shows stop confirmation.
+- **Paused** (`running=true, paused=true`): Frozen timer with Play/Stop. Full color stop button. Back press shows stop confirmation.
+- Session name displayed in dedicated `TextView` (`sessionNameText`) below TimerView in all states.
+- Zen circle indicator (`zenIndicator`) in toolbar shows when `MeditationService` is running.
+- Session selection persists via `PREF_KEY_LAST_SESSION` in SharedPreferences.
+- **Sessions screen during meditation**: All interactions blocked (card selection, Start, Edit/Copy/Delete, FAB).
 
 ## Transitions
 - **MaterialFadeThrough**: top-level tab switches (Sessions ↔ Meditation ↔ Settings)
@@ -101,7 +105,7 @@ User presses Start (Sessions tab or Meditation tab)
 ## Data Flows
 - **AlarmManager.setAlarmClock()** → SectionEndReceiver → MeditationService → Meditation.onSectionEnd() → Audio.playBell()
 - **Bell playback volume:** System STREAM_ALARM volume (set by user) × section dimming (`MediaPlayer.setVolume(volume/100f)`)
-- **UI updates:** Handler.postDelayed (300ms polling) reads Meditation state → TimerView
+- **UI updates:** Handler.postDelayed (300ms polling) reads Meditation state → TimerView. Idle state computed from `Section[]` in `MeditationViewModel.emitIdleState()`.
 - **Preferences:** SharedPreferences via PreferenceManager → read in Activity/Service/Fragments
 - **Database:** DbOperations → Room DAOs → SessionEntity/SectionEntity → Session/Section BOs
 - **Navigation:** BottomNavigationView.setSelectedItemId() for tab switches; NavController for drill-down

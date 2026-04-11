@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.app.AlertDialog;
 import com.google.android.material.transition.MaterialSharedAxis;
 import de.gaffga.android.zazentimer.DbOperations;
@@ -37,6 +38,7 @@ public class MeditationFragment extends Fragment {
     private boolean meditationRunning = false;
     private OnBackPressedCallback backPressedCallback;
     private TimerView timerView;
+    private TextView sessionNameText;
 
     @Inject
     DbOperations dbOperations;
@@ -57,6 +59,7 @@ public class MeditationFragment extends Fragment {
         this.butStop = (ImageButton) inflate.findViewById(R.id.but_stop);
         this.butPause = (ImageButton) inflate.findViewById(R.id.but_pause);
         this.timerView = (TimerView) inflate.findViewById(R.id.timerView);
+        this.sessionNameText = (TextView) inflate.findViewById(R.id.sessionNameText);
         this.butStop.setOnClickListener(view -> MeditationFragment.this.showStopConfirmationDialog());
         this.butPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +126,21 @@ public class MeditationFragment extends Fragment {
                 if (backPressedCallback != null) {
                     backPressedCallback.setEnabled(false);
                 }
+                if (state != null) {
+                    if (timerView != null) {
+                        timerView.setCurrentStartSeconds(state.currentStartSeconds);
+                        timerView.setNumTotalSeconds(state.totalSessionTime);
+                        timerView.setNextEndSeconds(state.nextEndSeconds);
+                        timerView.setNextStartSeconds(state.nextStartSeconds);
+                        timerView.setPrevStartSeconds(state.prevStartSeconds);
+                        timerView.setSectionElapsedSeconds(state.sectionElapsedSeconds);
+                        timerView.setSessionElapsedSeconds(state.sessionElapsedSeconds);
+                        timerView.setSectionNamesNoAnim(state.currentSectionName, state.nextSectionName);
+                    }
+                    if (sessionNameText != null) {
+                        sessionNameText.setText(state.sessionName);
+                    }
+                }
                 showIdleState();
                 return;
             }
@@ -140,6 +158,9 @@ public class MeditationFragment extends Fragment {
                 timerView.setSessionElapsedSeconds(state.sessionElapsedSeconds);
                 timerView.setSectionNames(state.currentSectionName, state.nextSectionName, state.nextNextSectionName);
             }
+            if (sessionNameText != null) {
+                sessionNameText.setText(state.sessionName);
+            }
             showRunningState();
             updateButtons();
         });
@@ -147,45 +168,22 @@ public class MeditationFragment extends Fragment {
 
     private void showIdleState() {
         this.meditationRunning = false;
-        if (timerView != null) {
-            timerView.setCurrentStartSeconds(0);
-            timerView.setNextEndSeconds(0);
-            timerView.setNextStartSeconds(0);
-            timerView.setPrevStartSeconds(0);
-            timerView.setSectionElapsedSeconds(0);
-            timerView.setSessionElapsedSeconds(0);
-            SharedPreferences prefs = ZazenTimerActivity.getPreferences(requireContext());
-            int sessionId = prefs.getInt(ZazenTimerActivity.PREF_KEY_LAST_SESSION, -1);
-            if (sessionId != -1 && dbOperations != null) {
-                Session session = dbOperations.readSession(sessionId);
-                if (session != null) {
-                    Section[] sections = dbOperations.readSections(sessionId);
-                    int totalSeconds = 0;
-                    for (Section s : sections) {
-                        totalSeconds += s.duration;
-                    }
-                    timerView.setNumTotalSeconds(totalSeconds);
-                    timerView.setSectionNamesNoAnim(session.name, "");
-                } else {
-                    timerView.setNumTotalSeconds(0);
-                    timerView.setSectionNamesNoAnim("", "");
-                }
-            } else {
-                timerView.setNumTotalSeconds(0);
-                timerView.setSectionNamesNoAnim("", "");
-            }
-        }
         if (butStop != null) {
-            butStop.setVisibility(View.GONE);
+            butStop.setVisibility(View.VISIBLE);
+            butStop.setEnabled(false);
+            butStop.setAlpha(0.4f);
         }
         if (butPause != null) {
-            butPause.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow_white_48dp));
+            butPause.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                R.drawable.ic_play_arrow_white_48dp));
         }
     }
 
     private void showRunningState() {
         if (butStop != null) {
             butStop.setVisibility(View.VISIBLE);
+            butStop.setEnabled(true);
+            butStop.setAlpha(1.0f);
         }
     }
 
