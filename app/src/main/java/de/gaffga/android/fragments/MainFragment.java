@@ -216,6 +216,9 @@ public class MainFragment extends Fragment {
             butStart.setEnabled(interactionsEnabled);
             butStart.setAlpha(interactionsEnabled ? 1.0f : 0.4f);
         }
+        if (sessionListAdapter != null) {
+            sessionListAdapter.setInteractionsEnabled(interactionsEnabled);
+        }
     }
 
     public void updateSessionList() {

@@ -26,14 +26,13 @@
 - [x] #55 Fix corrupted meditation state after natural finish
 - [x] #56 Volume system simplification
 
-## In Progress (this session)
-- [ ] #57 Show session name on meditation screen and meditation-in-progress indicator in toolbar
-  - **Feature 1 (done)**: Session name below progress ring in dedicated `TextView` (`sessionNameText`), visible in all states (idle/running/paused). Idle state shows colored section arcs with first section name in the ring (no longer shows session name inside TimerView).
-  - **Feature 2 (done)**: Zen circle `ImageView` (`zenIndicator`) in toolbar, toggled based on `MeditationService.isServiceRunning()`.
-  - **Feature 3 (done)**: Sessions screen blocks all interactions during running meditation (card selection, Start button, Edit/Copy/Delete, FAB).
-  - **Idle state redesign**: `MeditationViewModel.emitIdleState()` builds full `MeditationUiState(running=false)` with section arc data from `Section[]`. Never emits null. `MeditationFragment` has three-branch observer (idle/running/paused). Idle shows greyed stop button.
-  - **Files modified**: `MeditationUiState.java`, `Meditation.java`, `MeditationService.java`, `MeditationViewModel.java`, `MeditationFragment.java`, `MainFragment.java`, `ZazenTimerActivity.java`, `fragment_meditation.xml` (portrait + landscape), `main.xml`
-  - **Status**: Build passes (`./gradlew build` + `assembleDebugAndroidTest`). Needs device testing before closing.
+## Completed (this session)
+- [x] #57 Show session name on meditation screen and meditation-in-progress indicator in toolbar
+  - Session name in dedicated `TextView` below TimerView in all states (idle/running/paused)
+  - Idle state redesign: `MeditationViewModel.emitIdleState()` with colored section arcs, first section name in ring, greyed stop button
+  - Zen circle `ImageView` in toolbar toggled by `MeditationService.isServiceRunning()`, 16dp left margin
+  - Sessions screen blocks all interactions during meditation: card selection, overflow popup, Start button, FAB
+  - `SessionListAdapter.interactionsEnabled` flag guards clicks at the adapter level
 
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
@@ -42,4 +41,4 @@
 - None
 
 ## Next Session Suggestion
-Test #57 on device/emulator, then close the issue if all features work correctly.
+Rerun emulator screen capture with full `adb logcat` to capture all app logs and correlate with specific screens (#51 remaining work).

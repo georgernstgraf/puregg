@@ -18,6 +18,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
 
     private List<SessionWithTimeInfo> items = new ArrayList<>();
     private int selectedPosition = -1;
+    private boolean interactionsEnabled = true;
     private final OnItemClickListener clickListener;
     private final OnSessionActionListener actionListener;
 
@@ -86,6 +87,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         holder.itemView.setActivated(position == selectedPosition);
 
         holder.itemView.setOnClickListener(v -> {
+            if (!interactionsEnabled) return;
             int previous = selectedPosition;
             selectedPosition = holder.getAdapterPosition();
             if (previous != -1) {
@@ -98,6 +100,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         });
 
         holder.sessionOverflow.setOnClickListener(v -> {
+            if (!interactionsEnabled) return;
             PopupMenu popup = new PopupMenu(v.getContext(), v);
             popup.getMenuInflater().inflate(R.menu.menu_session_card_actions, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -145,6 +148,10 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         if (selectedPosition != -1) {
             notifyItemChanged(selectedPosition);
         }
+    }
+
+    public void setInteractionsEnabled(boolean enabled) {
+        this.interactionsEnabled = enabled;
     }
 
     public int getSelectedPosition() {
