@@ -3,13 +3,14 @@
 Current status as of 2026-04-15.
 
 ## Current Focus
-Audio normalization and volume control simplification completion.
+Volume and audio system improvements completed.
 
 ## Completed (this session)
-- [x] #60 Volume control sync and bell audio normalization
+- [x] #60 Volume control and audio normalization
   - Normalized all `res/raw` bell audio files to consistent -16.0 LUFS using `scripts/normalize_bells.sh`.
   - Removed orphaned "Master Volume" setting from `preferences.xml` and `ZazenTimerActivity.java`.
   - Refactored `Audio.java` to use modern `AudioAttributes` (USAGE_ALARM) for better routing (Bluetooth support).
+  - Dim Bell slider: changed from continuous 0-100 to stepped 0%-90% in 10% increments with percentage label.
   - Improved `DuplicateSessionTest` stability by ensuring database reset before test run.
   - Verified build, unit tests, and instrumented tests on emulator API 35.
   - Successful installation and launch on emulator.

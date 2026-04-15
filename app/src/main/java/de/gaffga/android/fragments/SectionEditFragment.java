@@ -159,8 +159,16 @@ public class SectionEditFragment extends Fragment {
     private void fillViewFromData() {
         setViewBellCount(this.section.bellcount);
         setViewGap(this.section.bellpause);
-        binding.sectionGongVolume.setMax(100);
-        binding.sectionGongVolume.setProgress(100 - this.section.volume);
+        binding.sectionGongVolume.setMax(90);
+        int dimProgress = 100 - this.section.volume;
+        // Clamp to valid range in case legacy data has volume < 10
+        dimProgress = Math.min(dimProgress, 90);
+        dimProgress = Math.max(dimProgress, 0);
+        // Snap to nearest step of 10
+        dimProgress = ((dimProgress + 5) / 10) * 10;
+        if (dimProgress > 90) dimProgress = 90;
+        binding.sectionGongVolume.setProgress(dimProgress);
+        updateDimLabel(dimProgress);
         binding.sectionName.setText(this.section.name);
         setDurationMinutes(this.section.duration / 60);
         setDurationSeconds(this.section.duration % 60);
@@ -300,7 +308,16 @@ public class SectionEditFragment extends Fragment {
         });
         binding.sectionGongVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i2, boolean z) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    // Snap to steps of 10
+                    int snapped = ((progress + 5) / 10) * 10;
+                    if (snapped > 90) snapped = 90;
+                    if (snapped != progress) {
+                        seekBar.setProgress(snapped);
+                    }
+                    SectionEditFragment.this.updateDimLabel(snapped);
+                }
             }
 
             @Override
@@ -309,7 +326,8 @@ public class SectionEditFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                SectionEditFragment.this.section.volume = 100 - SectionEditFragment.this.binding.sectionGongVolume.getProgress();
+                int progress = seekBar.getProgress();
+                SectionEditFragment.this.section.volume = 100 - progress;
                 if (BellCollection.getInstance().getBellForSection(SectionEditFragment.this.section) != null) {
                     SectionEditFragment.this.audio.playAbsVolume(SectionEditFragment.this.section);
                 }
@@ -364,5 +382,13 @@ public class SectionEditFragment extends Fragment {
 
     public void setSectionId(int i) {
         this.sectionId = i;
+    }
+
+    private void updateDimLabel(int dimProgress) {
+        if (dimProgress == 0) {
+            binding.dimBellLabel.setText(R.string.dim_bell_label_off);
+        } else {
+            binding.dimBellLabel.setText(getString(R.string.dim_bell_label_format, dimProgress / 10));
+        }
     }
 }

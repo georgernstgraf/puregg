@@ -179,9 +179,18 @@
             android:paddingRight="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="100"
+            android:max="90"
             android:progress="0"
             android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/dimBellLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/dim_bell_label_off"
+            android:textSize="12sp"
+            android:paddingRight="20dp"
+            android:paddingBottom="4dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
