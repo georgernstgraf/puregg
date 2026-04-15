@@ -39,9 +39,10 @@
 
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
+- [ ] #60 Volume control sync and bell audio normalization
 
 ## Blockers
 - None
 
 ## Next Session Suggestion
-Rerun emulator screen capture with full `adb logcat` to capture all app logs and correlate with specific screens (#51 remaining work).
+Create issue #60, then implement bell audio normalization script and execute it.

@@ -106,7 +106,9 @@
 - **Reason**: Making idle a proper state with section arc data lets the TimerView show colored section arcs in idle (matching paused-at-0 appearance). The user requested that idle look the same as paused, except for a greyed stop button and no back-press interception. Storing session name in `MeditationUiState` makes it available in all states.
 - **Considered**: Creating a `Meditation` object for idle (rejected — requires `MeditationService` instance); keeping null LiveData for idle (rejected — can't carry section data); computing idle state in the Fragment (rejected — ViewModel owns state).
 - **Tradeoff**: `emitIdleState()` duplicates section boundary computation from `Meditation.java` (lines 206-236) with `currentSectionIdx=0`. If the boundary logic changes, both places must be updated. But the duplication is small (~10 lines) and the alternative (decoupling Meditation from MeditationService) would be a much larger refactor.
-- **Choice**: Inject 7-character Git commit hash at build time via `buildConfigField` in `build.gradle` using `git rev-parse --short=7 HEAD`. Display in About dialog as "Commit: abc1234".
-- **Reason**: More useful than `versionCode` for identifying which code is running on a device. Changes automatically every build with zero manual updates.
-- **Considered**: Reading git hash at runtime (rejected — .git dir not in APK); using `versionName` (manual, often stale).
-- **Tradeoff**: Build fails if git is not available (unlikely in CI or local dev). Hash is baked at compile time, not runtime.
+
+## 2026-04-13: Bell Audio Normalization
+- **Choice**: Normalize all bell sound files to a consistent -16.0 LUFS.
+- **Reason**: To eliminate significant loudness discrepancies between different bell sound files (a range of 9.4 LU was found).
+- **Considered**: Manual normalization; leaving as-is.
+- **Tradeoff**: Requires batch processing script; build-time overhead; user-imported files will not be automatically normalized (user advised of target LUFS).
