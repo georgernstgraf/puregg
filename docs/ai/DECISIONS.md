@@ -1,3 +1,8 @@
+# Decisions
+
+Architectural and technical decisions made in this project.
+Each entry documents WHAT was decided and WHY.
+
 ## 2026-04-04: UI Test Meta-Definition
 - **Choice**: Adopted a Markdown-based UI Test Plan (`docs/ai/UI_TEST_PLAN.md`) instead of immediately relying on BDD/Cucumber.
 - **Reason**: To quickly establish a single source of truth for UI test coverage that is easily readable by both human developers and AI agents without adding new framework dependencies immediately.
@@ -112,3 +117,9 @@
 - **Reason**: To eliminate significant loudness discrepancies between different bell sound files (a range of 9.4 LU was found).
 - **Considered**: Manual normalization; leaving as-is.
 - **Tradeoff**: Requires batch processing script; build-time overhead; user-imported files will not be automatically normalized (user advised of target LUFS).
+
+## 2026-04-15: Volume Control and Audio Routing Refactor (#60)
+- **Choice**: Removed the orphaned "Master Volume" setting from `preferences.xml` and refactored `Audio.java` to use modern `AudioAttributes` (USAGE_ALARM).
+- **Reason**: The "Master Volume" slider was redundant and non-functional after issue #56 simplified the volume system. `AudioAttributes` is the recommended way to handle audio routing in modern Android, ensuring better compatibility with Bluetooth devices.
+- **Considered**: Linking the "Master Volume" slider to the system alarm volume (rejected — redundant since system volume is globally accessible).
+- **Tradeoff**: Simplifies UI and codebase but requires users to use system volume controls for global volume adjustment.
