@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import de.gaffga.android.fragments.MainFragment;
 import de.gaffga.android.zazentimer.audio.BellCollection;
 import de.gaffga.android.zazentimer.bo.Section;
@@ -148,27 +147,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
         NavController nc = getNavController();
         if (nc != null) {
             appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.mainFragment, R.id.meditationFragment, R.id.settingsFragment)
+                    R.id.mainFragment)
                     .build();
             NavigationUI.setupActionBarWithNavController(this, nc, appBarConfiguration);
-            BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-            if (bottomNav != null) {
-                NavigationUI.setupWithNavController(bottomNav, nc);
-            }
-            nc.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-                @Override
-                public void onDestinationChanged(NavController controller,
-                        NavDestination destination, Bundle arguments) {
-                    if (bottomNav != null) {
-                        int destId = destination.getId();
-                        if (destId == R.id.sessionEditFragment || destId == R.id.sectionEditFragment) {
-                            bottomNav.setVisibility(View.GONE);
-                        } else {
-                            bottomNav.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            });
         }
         observeViewModel();
         if (preferences.getBoolean(PREF_KEY_FIRST_START, true)) {
@@ -261,6 +242,11 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     @Override
     public boolean onSupportNavigateUp() {
         NavController nc = getNavController();
+        if (nc != null && nc.getCurrentDestination() != null
+                && nc.getCurrentDestination().getId() == R.id.meditationFragment
+                && MeditationService.isServiceRunning()) {
+            return true;
+        }
         if (nc != null && appBarConfiguration != null) {
             return NavigationUI.navigateUp(nc, appBarConfiguration);
         }
@@ -276,18 +262,25 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void showSettingsScreen() {
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setSelectedItemId(R.id.settingsFragment);
+        NavController nc = getNavController();
+        if (nc != null) {
+            nc.navigate(R.id.action_mainFragment_to_settingsFragment);
+        }
     }
 
     public void showMeditationScreen() {
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setSelectedItemId(R.id.meditationFragment);
+        NavController nc = getNavController();
+        if (nc != null && nc.getCurrentDestination() != null
+                && nc.getCurrentDestination().getId() != R.id.meditationFragment) {
+            nc.navigate(R.id.action_mainFragment_to_meditationFragment);
+        }
     }
 
     public void showMainScreen() {
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setSelectedItemId(R.id.mainFragment);
+        NavController nc = getNavController();
+        if (nc != null) {
+            nc.popBackStack(R.id.mainFragment, false);
+        }
     }
 
     public void showSessionEditFragment(int sessionId) {
@@ -346,6 +339,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.menu_settings:
+                showSettingsScreen();
+                return true;
             case R.id.menu_privacy:
                 Log.d(TAG, "privacy");
                 showPrivacyScreen();

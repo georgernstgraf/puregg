@@ -11,6 +11,13 @@
         <action
             android:id="@+id/action_mainFragment_to_sessionEditFragment"
             app:destination="@id/sessionEditFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_meditationFragment"
+            app:destination="@id/meditationFragment"
+            app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
