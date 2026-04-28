@@ -95,7 +95,9 @@
     <string name="label_session_name">Session Name</string>
     <string name="menu_about">About...</string>
     <string name="menu_copy_session">Duplicate Session</string>
+    <string name="menu_delete_section">Delete Section</string>
     <string name="menu_delete_session">Delete Session</string>
+    <string name="menu_duplicate_section">Duplicate Section</string>
     <string name="menu_edit_session">Edit Session</string>
     <string name="menu_help">Help</string>
     <string name="menu_add_session">Add Session</string>
@@ -168,6 +170,8 @@
     <string name="sekunden">Seconds</string>
     <string name="select_audio">Select sound file</string>
     <string name="service_description">A running Zazen Meditation</string>
+    <string name="content_desc_drag_handle">Drag to reorder</string>
+    <string name="content_desc_section_actions">Section actions</string>
     <string name="content_desc_session_actions">Session actions</string>
     <string name="session_list_unnamed_entry">Unnamed Session</string>
     <string name="status_bar_notification_info_overflow">999+</string>

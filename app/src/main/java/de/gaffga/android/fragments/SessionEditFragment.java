@@ -92,12 +92,25 @@ public class SessionEditFragment extends Fragment {
         binding = FragmentEditSessionBinding.inflate(layoutInflater, viewGroup, false);
         this.pref = ZazenTimerActivity.getPreferences(getActivity());
 
-        adapter = new SectionListAdapter(new SectionListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Section section) {
-                SessionEditFragment.this.navigateToSectionEdit(section.id);
+        adapter = new SectionListAdapter(
+            new SectionListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Section section) {
+                    SessionEditFragment.this.navigateToSectionEdit(section.id);
+                }
+            },
+            new SectionListAdapter.OnSectionActionListener() {
+                @Override
+                public void onDeleteSection(int position) {
+                    deleteSectionAt(position);
+                }
+
+                @Override
+                public void onDuplicateSection(int position) {
+                    duplicateSectionAt(position);
+                }
             }
-        });
+        );
 
         binding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.list.setAdapter(adapter);
@@ -106,20 +119,7 @@ public class SessionEditFragment extends Fragment {
             new SectionTouchHelperCallback.SectionTouchListener() {
                 @Override
                 public void onSwipe(int position) {
-                    final Section deletedSection = adapter.getItem(position);
-                    final int deletedPosition = position;
-                    dbOperations.deleteSection(deletedSection.id);
-                    adapter.removeItem(position);
-
-                    Snackbar.make(binding.list, "Deleted '" + deletedSection.toString() + "'", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dbOperations.insertSection(SessionEditFragment.this.session, deletedSection);
-                                adapter.insertItem(deletedPosition, deletedSection);
-                            }
-                        })
-                        .show();
+                    deleteSectionAt(position);
                 }
 
                 @Override
@@ -204,6 +204,36 @@ public class SessionEditFragment extends Fragment {
         this.session.name = binding.textSitzungName.getText().toString();
         this.session.description = binding.textSitzungBeschreibung.getText().toString();
         dbOperations.updateSession(this.session);
+    }
+
+    private void deleteSectionAt(int position) {
+        final Section deletedSection = adapter.getItem(position);
+        final int deletedPosition = position;
+        dbOperations.deleteSection(deletedSection.id);
+        adapter.removeItem(position);
+
+        Snackbar.make(binding.list, "Deleted '" + deletedSection.toString() + "'", Snackbar.LENGTH_LONG)
+            .setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dbOperations.insertSection(SessionEditFragment.this.session, deletedSection);
+                    adapter.insertItem(deletedPosition, deletedSection);
+                }
+            })
+            .show();
+    }
+
+    private void duplicateSectionAt(int position) {
+        Section source = adapter.getItem(position);
+        Section copy = new Section(source.name, source.duration);
+        copy.bell = source.bell;
+        copy.bellUri = source.bellUri;
+        copy.bellcount = source.bellcount;
+        copy.bellpause = source.bellpause;
+        copy.volume = source.volume;
+        dbOperations.insertSection(this.session, copy);
+        sections = dbOperations.readSections(this.session.id);
+        initSectionList();
     }
 
     public void doCreateNewSection() {

@@ -77,7 +77,9 @@
     <string name="label_session_name">Sitzung Name</string>
     <string name="menu_about">Infos…</string>
     <string name="menu_copy_session">Sitzung duplizieren</string>
+    <string name="menu_delete_section">Abschnitt löschen</string>
     <string name="menu_delete_session">Sitzung löschen</string>
+    <string name="menu_duplicate_section">Abschnitt duplizieren</string>
     <string name="menu_edit_session">Sitzung bearbeiten</string>
     <string name="menu_help">Hilfe</string>
     <string name="menu_new_session">Neue Sitzung</string>
@@ -149,6 +151,8 @@
     <string name="sekunden">Sekunden</string>
     <string name="select_audio">Audiodatei auswählen</string>
     <string name="service_description">Eine laufende Zazen Meditation</string>
+    <string name="content_desc_drag_handle">Zum Neuanordnen ziehen</string>
+    <string name="content_desc_section_actions">Abschnittaktionen</string>
     <string name="content_desc_session_actions">Sitzungsaktionen</string>
     <string name="session_list_unnamed_entry">Sitzung ohne Namen</string>
     <string name="status_bar_notification_info_overflow">999+</string>

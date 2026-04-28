@@ -1,8 +1,12 @@
 package de.gaffga.android.fragments;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,24 +19,39 @@ public class SectionListAdapter extends RecyclerView.Adapter<SectionListAdapter.
 
     private List<Section> items = new ArrayList<>();
     private final OnItemClickListener clickListener;
+    private final OnSectionActionListener actionListener;
 
     public interface OnItemClickListener {
         void onItemClick(Section section);
     }
 
+    public interface OnSectionActionListener {
+        void onDeleteSection(int position);
+        void onDuplicateSection(int position);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView spinnerText1;
         final TextView spinnerText2;
+        final ImageView dragHandle;
+        final ImageButton sectionOverflow;
 
         ViewHolder(View view) {
             super(view);
+            dragHandle = view.findViewById(R.id.dragHandle);
             spinnerText1 = view.findViewById(R.id.spinnerText1);
             spinnerText2 = view.findViewById(R.id.spinnerText2);
+            sectionOverflow = view.findViewById(R.id.sectionOverflow);
         }
     }
 
     public SectionListAdapter(OnItemClickListener clickListener) {
+        this(clickListener, null);
+    }
+
+    public SectionListAdapter(OnItemClickListener clickListener, OnSectionActionListener actionListener) {
         this.clickListener = clickListener;
+        this.actionListener = actionListener;
     }
 
     @NonNull
@@ -73,6 +92,30 @@ public class SectionListAdapter extends RecyclerView.Adapter<SectionListAdapter.
             if (clickListener != null) {
                 clickListener.onItemClick(items.get(holder.getAdapterPosition()));
             }
+        });
+
+        holder.sectionOverflow.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(v.getContext(), v);
+            popup.getMenuInflater().inflate(R.menu.menu_section_card_actions, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    int pos = holder.getAdapterPosition();
+                    if (pos == RecyclerView.NO_POSITION || actionListener == null) {
+                        return false;
+                    }
+                    int id = menuItem.getItemId();
+                    if (id == R.id.card_action_delete_section) {
+                        actionListener.onDeleteSection(pos);
+                        return true;
+                    } else if (id == R.id.card_action_duplicate_section) {
+                        actionListener.onDuplicateSection(pos);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            popup.show();
         });
     }
 

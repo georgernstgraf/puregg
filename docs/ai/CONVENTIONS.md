@@ -11,6 +11,7 @@ Follow these without question. Do not deviate unless explicitly told.
 - Standard Android project structure: `app/src/main/java`, `app/src/main/res`, `app/src/main/assets`.
 
 ## API Patterns
+- RecyclerView adapter overflow menu: Use a callback interface (e.g. `OnSectionActionListener`), inflate a `PopupMenu` from an XML menu resource in `onBindViewHolder`, and wire menu item IDs to interface callbacks. Follow the pattern established in `SessionListAdapter.java`.
 - Use AndroidX libraries (`androidx.*`). The legacy `android.support` migration is complete.
 - Use `Context.*_SERVICE` constants instead of raw string service names.
 - Use `startForegroundService()` (API 26+) instead of `startService()` for foreground services.
