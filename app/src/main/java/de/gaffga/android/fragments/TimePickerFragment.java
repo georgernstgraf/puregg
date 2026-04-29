@@ -1,6 +1,7 @@
 package de.gaffga.android.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.app.Dialog;
 import androidx.fragment.app.DialogFragment;
 import android.app.TimePickerDialog;
@@ -84,9 +85,9 @@ public class TimePickerFragment extends androidx.fragment.app.DialogFragment imp
         return create;
     }
 
-    @Override // android.app.Fragment
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.activity = (Activity) context;
     }
 }

@@ -16,6 +16,15 @@ Follow these without question. Do not deviate unless explicitly told.
 - Use `Context.*_SERVICE` constants instead of raw string service names.
 - Use `startForegroundService()` (API 26+) instead of `startService()` for foreground services.
 - Use `registerForActivityResult()` (Activity Result API) instead of `onActivityResult()`.
+- **Deprecation migration cheat sheet** (all applied, build clean with `-Xlint:deprecation`):
+  - `onAttach(Activity)` → `onAttach(Context)` (add `import android.content.Context`)
+  - `ContextCompat.getDrawable(ctx, id)` → `ResourcesCompat.getDrawable(getResources(), id, getTheme())`
+  - `onBackPressed()` → `getOnBackPressedDispatcher().onBackPressed()`
+  - `getAdapterPosition()` → `getBindingAdapterPosition()`
+  - `stopForeground(boolean)` → `stopForeground(STOP_FOREGROUND_REMOVE)`
+  - `setHasOptionsMenu`/`onOptionsItemSelected`/`onPrepareOptionsMenu` → `addMenuProvider()` with `MenuProvider`
+  - `android.preference.PreferenceManager` → `androidx.preference.PreferenceManager`
+  - `SCREEN_BRIGHT_WAKE_LOCK` → `PARTIAL_WAKE_LOCK` (use `FLAG_KEEP_SCREEN_ON` on the activity window for screen-on behavior)
 
 ## Dependency Injection
 - Hilt is the DI framework. Use `@AndroidEntryPoint` on Activities/Fragments, `@HiltViewModel` on ViewModels.

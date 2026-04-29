@@ -14,8 +14,14 @@ translations. All stubs eliminated. Build verified green.
   - Serbian Latin script variant (b+sr+Latn)
   - Dead strings removed from English and German source files
   - Translation script infrastructure: `scripts/retranslate.py` + `locales.json`
+- [x] Enabled `-Xlint:deprecation` in `app/build.gradle` — surfaces all deprecation warnings during compilation
+- [x] Fixed 14 deprecation warnings across 10 files (see CONVENTIONS.md for full migration cheat sheet)
+- [x] Created `Medium_Phone_API_29` AVD (API 29, google_apis, x86_64)
+- [x] Ran 6 instrumentation tests on API 29 — all pass
+- [x] Ran 6 instrumentation tests on API 35 — all pass (via `am instrument`; Orchestrator broken on API 35)
 
 ## Completed (previous sessions)
+- [x] Batch 9 OOBE translations: 12 new language files
 - [x] Section list UI enhancements (drag handle, three-dot menu, delete/duplicate)
 - [x] #60 Volume control and audio normalization
 - [x] #57 Show session name on meditation screen and zen indicator in toolbar
@@ -27,8 +33,11 @@ translations. All stubs eliminated. Build verified green.
 ## Pending
 - [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
 
+## Known Issues
+- Android Test Orchestrator does not work on API 35 (0 tests reported by Gradle UTP runner; use `am instrument` directly)
+
 ## Blockers
 - None
 
 ## Next Session Suggestion
-Continue with #51 logcat documentation.
+Continue with #51 logcat documentation. Consider investigating the API 35 Orchestrator failure if CI needs to run on API 35.

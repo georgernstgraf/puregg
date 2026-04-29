@@ -90,7 +90,7 @@ public class SectionListAdapter extends RecyclerView.Adapter<SectionListAdapter.
 
         holder.itemView.setOnClickListener(v -> {
             if (clickListener != null) {
-                clickListener.onItemClick(items.get(holder.getAdapterPosition()));
+                clickListener.onItemClick(items.get(holder.getBindingAdapterPosition()));
             }
         });
 
@@ -100,7 +100,7 @@ public class SectionListAdapter extends RecyclerView.Adapter<SectionListAdapter.
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    int pos = holder.getAdapterPosition();
+                    int pos = holder.getBindingAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION || actionListener == null) {
                         return false;
                     }

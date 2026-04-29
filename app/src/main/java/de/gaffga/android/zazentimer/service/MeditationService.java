@@ -112,7 +112,7 @@ public class MeditationService extends Service {
     public void onMeditationEnd() {
         Log.d(TAG, "onMeditationEnd");
         isRunning = false;
-        stopForeground(true);
+        stopForeground(STOP_FOREGROUND_REMOVE);
         this.runningMeditation = null;
         Intent intent = new Intent();
         intent.setAction(ZAZENTIMER_SESSION_ENDED);
@@ -142,16 +142,12 @@ public class MeditationService extends Service {
         intent.setClass(this, ZazenTimerActivity.class);
         Notification.Builder builder;
         PendingIntent activity = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("zazen_timer_channel", "Meditation Timer", NotificationManager.IMPORTANCE_LOW);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
-            builder = new Notification.Builder(getBaseContext(), "zazen_timer_channel");
-        } else {
-            builder = new Notification.Builder(getBaseContext());
+        NotificationChannel channel = new NotificationChannel("zazen_timer_channel", "Meditation Timer", NotificationManager.IMPORTANCE_LOW);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        if (manager != null) {
+            manager.createNotificationChannel(channel);
         }
+        builder = new Notification.Builder(getBaseContext(), "zazen_timer_channel");
         builder.setContentTitle(string);
         builder.setContentText(string2);
         builder.setSmallIcon(i);

@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +52,6 @@ public class SessionEditFragment extends Fragment {
         super.onCreate(bundle);
         setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
         setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
-        setHasOptionsMenu(true);
         if (bundle != null) {
             this.sessionId = bundle.getInt("sessionId");
         } else if (getArguments() != null) {
@@ -59,30 +60,29 @@ public class SessionEditFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.menu_session_edit_help) {
-            showHelp13();
-            return true;
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requireActivity().addMenuProvider(new androidx.core.view.MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.session_edit_menu, menu);
+            }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.session_edit_menu, menu);
-        super.onPrepareOptionsMenu(menu);
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_session_edit_help) {
+                    showHelp13();
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), androidx.lifecycle.Lifecycle.State.RESUMED);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         handleAttach(context);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        handleAttach(activity);
     }
 
     @Override

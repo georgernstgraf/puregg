@@ -283,7 +283,7 @@ public class MeditationViewModel extends AndroidViewModel {
                 totalSeconds += section.duration;
             }
             this.wakeLock = null;
-            this.wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "ScreenOnWakeLock");
+            this.wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ScreenOnWakeLock");
             int timeoutSeconds = totalSeconds + 60;
             this.wakeLock.acquire(timeoutSeconds * 1000L);
             Log.i(TAG, "Acquired WakeLock to keep screen on for " + timeoutSeconds + " seconds");

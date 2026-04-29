@@ -140,3 +140,9 @@ Each entry documents WHAT was decided and WHY.
 - **Tradeoff**: Google Translate quality varies by language (poor for Bemba,
   Lao, Nuer). Some short strings may be left untranslated. Product names,
   URLs, and emails are kept in English across all locales.
+
+## 2026-04-29: Zero Deprecation Warnings Policy
+- **Choice**: Enabled `-Xlint:deprecation` in `app/build.gradle` and fixed all 14 deprecation warnings across 10 files to achieve a zero-warning build.
+- **Reason**: The compiler was silently hiding deprecation warnings. Without `-Xlint:deprecation`, only a generic "Some input files use or override a deprecated API" message appeared. Enabling the flag and fixing everything ensures the codebase stays forward-compatible and makes future deprecations immediately visible.
+- **Considered**: Suppressing warnings with `@SuppressWarnings("deprecation")`; only fixing the most critical deprecations.
+- **Tradeoff**: Some replacements are more verbose (e.g., `addMenuProvider()` vs. `setHasOptionsMenu()`), but all follow the officially recommended migration paths. Dead-code branches (like the pre-API-26 `Notification.Builder` else) were removed entirely since `minSdk=29`.

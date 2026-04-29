@@ -155,13 +155,6 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Log.d(TAG, "onAttach (Activity)");
-        handleAttach(activity);
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach (Context)");

@@ -27,7 +27,7 @@ public class SectionTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         if (listener != null) {
-            return listener.onMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return listener.onMove(viewHolder.getBindingAdapterPosition(), target.getBindingAdapterPosition());
         }
         return false;
     }
@@ -35,7 +35,7 @@ public class SectionTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         if (listener != null) {
-            listener.onSwipe(viewHolder.getAdapterPosition());
+            listener.onSwipe(viewHolder.getBindingAdapterPosition());
         }
     }
 

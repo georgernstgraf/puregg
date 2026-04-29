@@ -89,7 +89,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         holder.itemView.setOnClickListener(v -> {
             if (!interactionsEnabled) return;
             int previous = selectedPosition;
-            selectedPosition = holder.getAdapterPosition();
+            selectedPosition = holder.getBindingAdapterPosition();
             if (previous != -1) {
                 notifyItemChanged(previous);
             }
@@ -106,7 +106,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    int pos = holder.getAdapterPosition();
+                    int pos = holder.getBindingAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION || actionListener == null) {
                         return false;
                     }

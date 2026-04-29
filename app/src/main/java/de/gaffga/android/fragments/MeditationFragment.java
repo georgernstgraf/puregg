@@ -174,8 +174,8 @@ public class MeditationFragment extends Fragment {
             butStop.setAlpha(0.4f);
         }
         if (butPause != null) {
-            butPause.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                R.drawable.ic_play_arrow_white_48dp));
+            butPause.setImageDrawable(androidx.core.content.res.ResourcesCompat.getDrawable(getResources(),
+                R.drawable.ic_play_arrow_white_48dp, requireActivity().getTheme()));
         }
     }
 
@@ -212,7 +212,7 @@ public class MeditationFragment extends Fragment {
                         viewModel.stopMeditation();
                     }
                     backPressedCallback.setEnabled(false);
-                    requireActivity().onBackPressed();
+                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
                 })
                 .setNegativeButton(R.string.stop_meditation_cancel, (dialog, which) -> dialog.dismiss())
                 .setCancelable(true)
@@ -224,13 +224,13 @@ public class MeditationFragment extends Fragment {
             return;
         }
         if (!meditationRunning) {
-            this.butPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_white_48dp));
+            this.butPause.setImageDrawable(androidx.core.content.res.ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_48dp, getActivity().getTheme()));
             return;
         }
         if (this.viewModel != null && this.viewModel.isPaused()) {
-            this.butPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_white_48dp));
+            this.butPause.setImageDrawable(androidx.core.content.res.ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_white_48dp, getActivity().getTheme()));
         } else {
-            this.butPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_white_48dp));
+            this.butPause.setImageDrawable(androidx.core.content.res.ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_white_48dp, getActivity().getTheme()));
         }
     }
 }
