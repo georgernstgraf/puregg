@@ -108,10 +108,10 @@ jobs:
         sudo udevadm control --reload-rules
         sudo udevadm trigger --name-match=kvm
 
-    - name: Run Instrumented Tests (API 34)
+    - name: Run Instrumented Tests (API 35)
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 34
+        api-level: 35
         target: google_apis
         arch: x86_64
         heap-size: 512M
@@ -120,7 +120,7 @@ jobs:
         disable-animations: true
         script: ./gradlew connectedDebugAndroidTest --no-daemon
 
-    - name: Upload Test Results (API 34)
+    - name: Upload Test Results (API 35)
       if: always()
       uses: actions/upload-artifact@v4
       with:
