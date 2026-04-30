@@ -50,11 +50,7 @@ android {
     }
     
     testOptions {
-        if (project.hasProperty('disableOrchestrator')) {
-            execution 'host'
-        } else {
-            execution 'ANDROIDX_TEST_ORCHESTRATOR'
-        }
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 }
 
