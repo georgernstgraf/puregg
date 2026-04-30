@@ -50,7 +50,11 @@ android {
     }
     
     testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        if (project.hasProperty('disableOrchestrator')) {
+            execution 'ANDROID_JUNIT_RUNNER'
+        } else {
+            execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        }
     }
 }
 
