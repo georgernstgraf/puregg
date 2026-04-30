@@ -119,7 +119,7 @@ jobs:
         emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
         disable-animations: true
         script: |
-          ./gradlew assembleDebug assembleDebugAndroidTest --no-daemon
+          ./gradlew clean assembleDebug assembleDebugAndroidTest --no-daemon
           adb install -r app/build/outputs/apk/debug/app-debug.apk
           adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           adb shell am instrument -w -r -e debug false de.gaffga.android.zazentimer.test/de.gaffga.android.zazentimer.HiltTestRunner 2>&1 | tee /tmp/test-output.txt
