@@ -102,7 +102,11 @@ public class MainFragment extends Fragment {
         return inflate;
     }
 
-    private void onFabNewSessionClicked() {
+    public void onFabNewSessionClicked() {
+        addNewSession();
+    }
+
+    private void addNewSession() {
         if (!interactionsEnabled) return;
         Session session = new Session();
         session.name = "";

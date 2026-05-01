@@ -55,4 +55,31 @@ public class MeditationPage extends BasePage {
         clickOnView(R.id.but_stop);
         return new MainPage();
     }
+
+    /**
+     * Verifies the pause button is displayed.
+     * @return This MeditationPage instance for method chaining
+     */
+    public MeditationPage verifyPauseButtonDisplayed() {
+        checkElementIsDisplayed(R.id.but_pause);
+        return this;
+    }
+
+    /**
+     * Verifies the stop button is displayed.
+     * @return This MeditationPage instance for method chaining
+     */
+    public MeditationPage verifyStopButtonDisplayed() {
+        checkElementIsDisplayed(R.id.but_stop);
+        return this;
+    }
+
+    /**
+     * Presses back and returns to the main screen.
+     * @return The MainPage instance
+     */
+    public MainPage goBack() {
+        pressBack();
+        return new MainPage();
+    }
 }

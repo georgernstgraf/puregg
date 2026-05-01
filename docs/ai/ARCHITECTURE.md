@@ -25,16 +25,16 @@ Android meditation timer (ZazenTimer) targeting API 29-35.
 | `SectionEditFragment` | Edit Section | Edit section duration, bell, volume, gap |
 | `SettingsFragment` | Settings | Preferences via PreferenceFragmentCompat |
 
-**BottomNavigationView**: 3 tabs — Sessions, Meditation, Settings. Always visible except during session/section editing.
-**AppBarConfiguration**: 3 tab destinations (mainFragment, meditationFragment, settingsFragment) are top-level (no up button). Wired via `NavigationUI.setupActionBarWithNavController()`.
+**Toolbar overflow menu**: 4 items — Add Session, Settings, Privacy, About. Only visible on `mainFragment`.
+**AppBarConfiguration**: 1 top-level destination (`mainFragment`, shows no up button). Wired via `NavigationUI.setupActionBarWithNavController()`.
 **About**: Shown as `AlertDialog` from overflow menu (not a fragment destination). Matches Privacy dialog pattern.
 
 Navigation flow:
 ```
-Bottom Nav: Sessions ↔ Meditation ↔ Settings
-Sessions tab --[Start]--> Meditation tab (auto-starts)
-Sessions tab --[FAB]--> SessionEditFragment (new session)
-Sessions tab --[Card Edit]--> SessionEditFragment
+Sessions screen --[Start]--> MeditationFragment (auto-starts)
+Sessions screen --[Overflow > Add Session]--> SessionEditFragment (new session)
+Sessions screen --[Card Edit]--> SessionEditFragment
+Sessions screen --[Overflow > Settings]--> SettingsFragment
 SessionEdit --[Edit Section]--> SectionEditFragment
 Overflow menu --[Privacy]--> AlertDialog
 Overflow menu --[About]--> AlertDialog
@@ -50,7 +50,6 @@ Overflow menu --[About]--> AlertDialog
 - **Sessions screen during meditation**: All interactions blocked (card selection, Start, Edit/Copy/Delete, FAB).
 
 ## Transitions
-- **MaterialFadeThrough**: top-level tab switches (Sessions ↔ Meditation ↔ Settings)
 - **MaterialSharedAxis X**: drill-down navigation (session edit, section edit)
 - **MaterialSharedAxis Y**: meditation screen entry/exit
 
@@ -108,8 +107,7 @@ User presses Start (Sessions tab or Meditation tab)
 - **UI updates:** Handler.postDelayed (300ms polling) reads Meditation state → TimerView. Idle state computed from `Section[]` in `MeditationViewModel.emitIdleState()`.
 - **Preferences:** SharedPreferences via PreferenceManager → read in Activity/Service/Fragments
 - **Database:** DbOperations → Room DAOs → SessionEntity/SectionEntity → Session/Section BOs
-- **Navigation:** BottomNavigationView.setSelectedItemId() for tab switches; NavController for drill-down
-- **Tab switching:** All tab switches use `BottomNavigationView.setSelectedItemId()`. Navigation actions only for drill-down screens (session/section editing).
+- **Navigation:** NavController.navigate() and popBackStack() from ZazenTimerActivity helper methods (showMeditationScreen, showSettingsScreen, showMainScreen, showSessionEditFragment).
 
 ## Commands
 | Command | Purpose |

@@ -346,6 +346,12 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
                 Log.d(TAG, "privacy");
                 showPrivacyScreen();
                 return true;
+            case R.id.menu_add_session:
+                MainFragment mf = findMainFragment();
+                if (mf != null) {
+                    mf.onFabNewSessionClicked();
+                }
+                return true;
             case R.id.menu_about:
                 showAboutScreen();
                 return true;
