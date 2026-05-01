@@ -87,6 +87,12 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     private boolean showPrefsOnStart = false;
     private MeditationViewModel viewModel;
     private boolean appRunning = false;
+
+    void forceStopMeditationForTest() {
+        if (viewModel != null) {
+            viewModel.stopUpdateThread();
+        }
+    }
     private Handler handler;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;

@@ -46,30 +46,33 @@ public class MeditationServiceTest {
         hiltRule.inject();
         IdlingRegistry.getInstance().register(meditationIdlingResource);
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        try {
-            activityRule.getScenario().onActivity(activity -> {
-                SharedPreferences pref = ZazenTimerActivity.getPreferences(activity);
-                pref.edit()
-                    .putBoolean("mute_mode_none", false)
-                    .putBoolean("mute_mode_vibrate", false)
-                    .putBoolean("mute_mode_vibrate_sound", true)
-                    .apply();
-            });
-        } catch (Exception e) { }
+        activityRule.getScenario().onActivity(activity -> {
+            SharedPreferences pref = ZazenTimerActivity.getPreferences(activity);
+            pref.edit()
+                .putBoolean("mute_mode_none", false)
+                .putBoolean("mute_mode_vibrate", false)
+                .putBoolean("mute_mode_vibrate_sound", true)
+                .apply();
+            if (activity.dbOperations.readSessions().length == 0
+                    || activity.dbOperations.readSections(
+                        activity.dbOperations.readSessions()[0].id).length == 0) {
+                activity.resetDatabaseForTest();
+            }
+        });
     }
 
     @After
     public void tearDown() {
+        activityRule.getScenario().onActivity(activity ->
+                activity.forceStopMeditationForTest());
         IdlingRegistry.getInstance().unregister(meditationIdlingResource);
     }
 
     private void clickStopButtonWithUiAutomator() {
-        // Use UI Automator to click the stop button by text (doesn't wait for idle)
         UiObject stopButton = device.findObject(new UiSelector().text("Stop"));
         try {
             stopButton.click();
         } catch (Exception e) {
-            // Fallback to resource ID if text doesn't work
             UiObject stopButtonById = device.findObject(new UiSelector()
                     .resourceId("de.gaffga.android.zazentimer:id/but_stop"));
             try {
@@ -80,21 +83,25 @@ public class MeditationServiceTest {
         }
     }
 
-    private void clickByTextWithUiAutomator(String text) {
-        UiObject button = device.findObject(new UiSelector().text(text));
-        try {
-            button.click();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to click text: " + text, e);
-        }
-    }
-
     private void clickByTextContainsWithUiAutomator(String text) {
-        UiObject button = device.findObject(new UiSelector().textContains(text));
+        UiObject button = device.findObject(new UiSelector()
+                .textContains(text)
+                .className("android.widget.Button"));
         try {
             button.click();
         } catch (Exception e) {
             throw new RuntimeException("Failed to click text containing: " + text, e);
+        }
+    }
+
+    private void clickCancelDialog() {
+        UiObject cancelButton = device.findObject(new UiSelector()
+                .textContains("Cancel")
+                .className("android.widget.Button"));
+        try {
+            cancelButton.click();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to click Cancel", e);
         }
     }
 
@@ -109,33 +116,26 @@ public class MeditationServiceTest {
                 .verifyMainScreenIsDisplayed()
                 .selectSessionByPosition(0);
 
-        // Start meditation
         activityRule.getScenario().onActivity(activity ->
                 activity.startMeditation());
 
-        // Wait for service to fully start (foreground service needs time)
         SystemClock.sleep(4000);
 
-        // Click stop using UI Automator (bypasses Espresso idle check)
         clickStopButtonWithUiAutomator();
         SystemClock.sleep(2000);
 
-        // Verify dialog is shown using UI Automator
         assertTrue("Stop dialog should be visible",
                 isDialogVisible("Stop meditation?"));
 
-        // Cancel dialog using UI Automator - use textContains for flexibility
-        clickByTextContainsWithUiAutomator("Cancel");
+        clickCancelDialog();
         SystemClock.sleep(500);
 
-        // Stop again
         clickStopButtonWithUiAutomator();
         SystemClock.sleep(500);
 
-        // Confirm stop
         clickByTextContainsWithUiAutomator("Stop");
 
-        // Test passes
+        SystemClock.sleep(2000);
     }
 
     @Test
@@ -144,20 +144,16 @@ public class MeditationServiceTest {
                 .verifyMainScreenIsDisplayed()
                 .selectSessionByPosition(0);
 
-        // Start meditation
         activityRule.getScenario().onActivity(activity ->
                 activity.startMeditation());
 
-        // Wait for timer to tick
         SystemClock.sleep(4000);
 
-        // Stop meditation using UI Automator
         clickStopButtonWithUiAutomator();
         SystemClock.sleep(1000);
 
-        // Confirm stop
         clickByTextContainsWithUiAutomator("Stop");
 
-        // Test passes
+        SystemClock.sleep(2000);
     }
 }

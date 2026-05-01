@@ -8,6 +8,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.os.SystemClock;
+
 import de.gaffga.android.zazentimer.R;
 
 /**
@@ -17,7 +19,7 @@ public class SettingsPage extends BasePage {
 
     public SettingsPage() {
         // Wait for settings fragment to load and scroll to backup preference
-        try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+        try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
         try {
             onView(withText(R.string.pref_title_backup)).perform(scrollTo());
             onView(withText(R.string.pref_title_backup)).check(matches(isDisplayed()));
@@ -42,6 +44,7 @@ public class SettingsPage extends BasePage {
      * After confirmation, SAF file picker opens.
      */
     public SettingsPage clickRestoreAndConfirm() {
+        SystemClock.sleep(500);
         try {
             onView(withText(R.string.pref_title_restore)).perform(scrollTo());
         } catch (Exception ignored) {}
