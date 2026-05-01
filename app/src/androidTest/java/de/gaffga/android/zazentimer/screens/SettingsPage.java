@@ -4,8 +4,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.os.SystemClock;
@@ -18,13 +20,14 @@ import de.gaffga.android.zazentimer.R;
 public class SettingsPage extends BasePage {
 
     public SettingsPage() {
-        // Wait for settings fragment to load and scroll to backup preference
         try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
         try {
             onView(withText(R.string.pref_title_backup)).perform(scrollTo());
-            onView(withText(R.string.pref_title_backup)).check(matches(isDisplayed()));
         } catch (Exception e) {
-            // May already be visible without scrolling
+            try {
+                onView(withId(android.R.id.list)).perform(swipeUp());
+                SystemClock.sleep(500);
+            } catch (Exception ignored) {}
         }
     }
 
@@ -34,7 +37,10 @@ public class SettingsPage extends BasePage {
     public SettingsPage clickBackup() {
         try {
             onView(withText(R.string.pref_title_backup)).perform(scrollTo());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+            try { onView(withId(android.R.id.list)).perform(swipeUp()); SystemClock.sleep(300); } catch (Exception ignored2) {}
+        }
+        SystemClock.sleep(300);
         onView(withText(R.string.pref_title_backup)).perform(click());
         return this;
     }
@@ -44,12 +50,14 @@ public class SettingsPage extends BasePage {
      * After confirmation, SAF file picker opens.
      */
     public SettingsPage clickRestoreAndConfirm() {
-        SystemClock.sleep(500);
         try {
             onView(withText(R.string.pref_title_restore)).perform(scrollTo());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+            try { onView(withId(android.R.id.list)).perform(swipeUp()); SystemClock.sleep(300); } catch (Exception ignored2) {}
+        }
+        SystemClock.sleep(300);
         onView(withText(R.string.pref_title_restore)).perform(click());
-        // Confirm the "are you sure?" dialog
+        SystemClock.sleep(300);
         onView(withText(R.string.ok)).perform(click());
         return this;
     }
