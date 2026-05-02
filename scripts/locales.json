@@ -29,6 +29,7 @@
   {"dir": "values-eu-rES", "gt_code": "eu"},
   {"dir": "values-fa", "gt_code": "fa"},
   {"dir": "values-fi", "gt_code": "fi"},
+  {"dir": "values-fil", "base_dir": "values-tl"},
   {"dir": "values-fr", "gt_code": "fr"},
   {"dir": "values-fr-rCA", "gt_code": "fr"},
   {"dir": "values-fy", "gt_code": "fy"},
