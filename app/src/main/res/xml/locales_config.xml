@@ -3,12 +3,14 @@
     <locale android:name="af"/>
     <locale android:name="am"/>
     <locale android:name="ar"/>
+    <locale android:name="as"/>
     <locale android:name="az-AZ"/>
     <locale android:name="bem"/>
     <locale android:name="be-BY"/>
     <locale android:name="bg"/>
     <locale android:name="bho"/>
     <locale android:name="bn-BD"/>
+    <locale android:name="bo"/>
     <locale android:name="bs-BA"/>
     <locale android:name="sr-Latn"/>
     <locale android:name="ca"/>
@@ -19,6 +21,8 @@
     <locale android:name="cy"/>
     <locale android:name="da"/>
     <locale android:name="de"/>
+    <locale android:name="doi"/>
+    <locale android:name="dv"/>
     <locale android:name="el"/>
     <locale android:name="en-AU"/>
     <locale android:name="en-GB"/>
@@ -57,6 +61,8 @@
     <locale android:name="km-KH"/>
     <locale android:name="kn-IN"/>
     <locale android:name="ko"/>
+    <locale android:name="kok"/>
+    <locale android:name="ks"/>
     <locale android:name="ku"/>
     <locale android:name="ky-KG"/>
     <locale android:name="la"/>
@@ -66,6 +72,7 @@
     <locale android:name="lt"/>
     <locale android:name="luo"/>
     <locale android:name="lv"/>
+    <locale android:name="mai"/>
     <locale android:name="mg"/>
     <locale android:name="mi"/>
     <locale android:name="mk-MK"/>
@@ -95,6 +102,7 @@
     <locale android:name="ru"/>
     <locale android:name="rw"/>
     <locale android:name="sa"/>
+    <locale android:name="sat"/>
     <locale android:name="sd"/>
     <locale android:name="sg"/>
     <locale android:name="si-LK"/>

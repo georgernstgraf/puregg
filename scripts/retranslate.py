@@ -21,7 +21,7 @@ import sys
 import time
 
 try:
-    from deep_translator import GoogleTranslator
+    from deep_translator import GoogleTranslator, MyMemoryTranslator
 except ImportError:
     print("Error: deep-translator not installed. Run: pip install deep-translator")
     sys.exit(1)
@@ -102,14 +102,22 @@ def escape_apostrophes(text):
     return RAW_APOS_RE.sub(r"\\'", text)
 
 
-def translate_value(name, value, gt_code):
+def translate_value(name, value, gt_code=None, mymemory_code=None):
+    translator = None
+    if mymemory_code:
+        translator = MyMemoryTranslator(source="en-GB", target=mymemory_code)
+    elif gt_code:
+        translator = GoogleTranslator(source="en", target=gt_code)
+    else:
+        return value
+
     if name in SPLIT_BY_NEWLINE:
         segments = value.split("\\n")
         translated = []
         for seg in segments:
             masked, mapping = mask_specials(seg)
             try:
-                t = GoogleTranslator(source="en", target=gt_code).translate(masked)
+                t = translator.translate(masked)
                 t = unmask_specials(t, mapping)
                 translated.append(escape_apostrophes(t))
             except Exception as e:
@@ -119,7 +127,7 @@ def translate_value(name, value, gt_code):
         return "\\n".join(translated)
 
     masked, mapping = mask_specials(value)
-    t = GoogleTranslator(source="en", target=gt_code).translate(masked)
+    t = translator.translate(masked)
     t = unmask_specials(t, mapping)
     return escape_apostrophes(t)
 
@@ -167,7 +175,8 @@ def process_locale(locale_cfg, source_strings, source_order, mode, dry_run):
             else:
                 result[name] = source_strings[name]
     else:
-        gt_code = locale_cfg["gt_code"]
+        gt_code = locale_cfg.get("gt_code")
+        mymemory_code = locale_cfg.get("mymemory_code")
         for name in source_order:
             if name not in source_strings:
                 continue
@@ -182,7 +191,7 @@ def process_locale(locale_cfg, source_strings, source_order, mode, dry_run):
                 result[name] = source_strings[name]
                 continue
             try:
-                translated = translate_value(name, source_strings[name], gt_code)
+                translated = translate_value(name, source_strings[name], gt_code=gt_code, mymemory_code=mymemory_code)
                 result[name] = translated
                 print(f"    OK: {name}")
             except Exception as e:
@@ -242,6 +251,8 @@ def main():
         label = dir_name
         if "gt_code" in locale_cfg:
             label += f" ({locale_cfg['gt_code']})"
+        elif "mymemory_code" in locale_cfg:
+            label += f" (mymemory:{locale_cfg['mymemory_code']})"
         else:
             label += f" (copy from {locale_cfg['base_dir']})"
         print(f"\n=== {label} ===")
