@@ -1,39 +1,40 @@
 # Project State
 
-Current status as of 2026-05-01.
+Current status as of 2026-05-02.
 
 ## Current Focus
-Issue #38 completed. UI test plan fully automated with 20 new instrumented tests across 5 new test classes.
+#83 and #84 completed. All instrumented tests automated. Retranslate tooling implemented.
 
 ## Completed (this session)
-- [x] #38 Completing the UI test plan
-  - Prerequisites: Fixed "Add Session" gap (added menu item to toolbar overflow), updated ARCHITECTURE.md to reflect bottom nav removal
-  - #46 (A): Test infrastructure — 3 new page objects (SessionEditPage, SectionEditPage, AboutPage), DatabaseIdlingResource, enhanced BasePage/MainPage
-  - #48 (B): Main screen & navigation tests — 5 tests (selection highlight, add session, back arrows, rotation)
-  - #47 (C): Session CRUD tests — 4 tests (edit, update metadata, delete, delete cancel)
-  - #45 (D): Section editing tests — 3 tests (add section, edit config, bell playback)
-  - #49 (E): Settings tests — 6 tests (open settings, theme, mute, brightness, backup/restore intents)
-  - #44 (F): Meditation service tests — 2 tests (stop confirmation, timer countdown)
-  - Total instrumented tests: 10 test classes, ~25 test methods
-  - UI_TEST_PLAN.md updated: all scenarios now 🟢 except Screen Lock and Section Transition (marked as skipped)
-  - ARCHITECTURE.md updated: removed bottom nav references, updated navigation flow
+- [x] #84 MeditationService IdlingResource — 2 meditation tests un-@Ignored, passing on API 29 + API 36 CI
+  - UI Automator for meditation phase interactions (bypasses Espresso looper-idle check)
+  - Data guard for CI fresh DB, forceStopMeditationForTest() cleanup
+  - Fixes for dialog button targeting with className(Button) selector
+- [x] #83 About page rewrite + retranslate tooling
+  - Rewrote about1/2/3 with clickable HTML links
+  - Implemented scripts/retranslate.py (--diff, --all, --dry-run)
+  - Created scripts/locales.json (127 locales) and scripts/keep_english.json
+  - Fixed 31 locales missing keep-english strings from old translate_batch9.py
+  - Propagated about string updates to all 127 locales
 
 ## Completed (previous sessions)
-- [x] #80 Fixed 0-tests issue on API 36/35 CI test-max job
-- [x] #67 Epic: Translate App into 206 OOBE languages
-- [x] Enabled `-Xlint:deprecation` — 14 warnings fixed across 10 files
-- [x] Multiple bug fixes (#55, #56, #57, #58, #60, #61, #62)
+- [x] #38 Full UI test plan automation (22 tests, 10 classes)
+- [x] #80 Fixed 0-tests issue on API 36 CI
+- [x] #67 Epic: Translate App into 127 OOBE languages
 
 ## Pending
-- [ ] #51 (remaining) Logcat correlation with screen navigation, full log capture per screen
-- [ ] Run connected tests on emulator to verify new tests pass (compilation verified)
+- [ ] #82 Refactor namespace to `zazentimer.graf.priv.at`
+- [ ] #81 Session image visibility + grip handles
+- [ ] #64 Play Store
+- [ ] SettingsTest.testRestore/testBackup CI failures (PreferenceFragmentCompat scroll issue)
 
 ## Known Issues
 - Gradle UTP runner fails to discover tests on API 35+ emulators. Workaround: direct `am instrument`.
-- 2 scenarios skipped (Screen Lock, Section Transition) — too complex/flaky for automated testing.
+- SettingsTest.testRestore and testBackup fail on CI (API 29 and 36) — PreferenceFragmentCompat scroll not working in headless emulator
+- SectionEditTest.testBellSoundPlayback and SessionCrudTest.testOpenEditSession fail on API 36 CI only
 
 ## Blockers
 - None
 
 ## Next Session Suggestion
-Run connected tests on emulator to verify all new tests pass, then continue with #51.
+Consider #82 (namespace refactor), #81 (session card UI), or fixing the remaining CI test failures.

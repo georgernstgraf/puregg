@@ -1,6 +1,6 @@
 # Architecture
 
-Living structural map of the system as of 2026-04-11.
+Living structural map of the system as of 2026-05-02.
 Overwritten when structural changes occur during a session.
 
 ## Overview
@@ -27,7 +27,7 @@ Android meditation timer (ZazenTimer) targeting API 29-35.
 
 **Toolbar overflow menu**: 4 items — Add Session, Settings, Privacy, About. Only visible on `mainFragment`.
 **AppBarConfiguration**: 1 top-level destination (`mainFragment`, shows no up button). Wired via `NavigationUI.setupActionBarWithNavController()`.
-**About**: Shown as `AlertDialog` from overflow menu (not a fragment destination). Matches Privacy dialog pattern.
+**About**: Shown as `AlertDialog` from overflow menu (not a fragment destination). Uses `Html.fromHtml()` + `LinkMovementMethod` for clickable links in about text. Matches Privacy dialog pattern.
 
 Navigation flow:
 ```

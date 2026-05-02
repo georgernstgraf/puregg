@@ -54,11 +54,24 @@ There are 127 entries covering Google Translate's NMT model support.
 ### Keep in English
 Defined in `scripts/keep_english.json`. These strings are copied verbatim to
 all locales (never sent to Google Translate):
-- `about1`, `about2`, `about3` (contain email/URLs)
+- `about1`, `about2`, `about3` (contain URLs/HTML)
 - `app_description`, `app_name`
 - `bell_name_1` through `bell_name_8` (product names)
+- `character_counter_pattern`
 - `theme_value_dark`, `theme_value_light`
 - All `abc_*` prefixed strings (AndroidX library strings)
+
+### Regional Variants
+Some locale directories are regional copies, not independently translated:
+- `values-en-rAU`, `values-en-rGB`, `values-en-rIN` copy from `values` (English)
+- `values-ms-rMY` copies from `values-ms` (Malay)
+- `values-zh-rHK` copies from `values-zh-rTW` (Traditional Chinese)
+- Defined in `scripts/locales.json` with `"base_dir"` instead of `"gt_code"`
+
+### Special Google Translate Code Mappings
+- `values-in` → `id` (Indonesian), `values-iw` → `he` (Hebrew)
+- `values-b+sr+Latn` → `sr-Latn`, `values-pt-rPT` → `pt-PT`
+- `values-nb` → `no` (Norwegian Bokmål)
 
 ### Format Specifier Safety
 Use ASCII placeholder masking to prevent Google Translate from corrupting
