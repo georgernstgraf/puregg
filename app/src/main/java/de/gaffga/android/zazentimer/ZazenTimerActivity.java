@@ -31,7 +31,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import de.gaffga.android.fragments.MainFragment;
 import de.gaffga.android.zazentimer.audio.BellCollection;
 import de.gaffga.android.zazentimer.bo.Section;
@@ -311,9 +314,14 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
                 + getString(R.string.about1) + "\n\n"
                 + getString(R.string.about2) + "\n\n"
                 + getString(R.string.about3);
+        TextView textView = new TextView(this);
+        textView.setText(Html.fromHtml(message));
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        int pad = (int) (24 * getResources().getDisplayMetrics().density);
+        textView.setPadding(pad, pad, 0, 0);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.caption_zazen_meditation)
-                .setMessage(message)
+                .setView(textView)
                 .setPositiveButton(R.string.privacy_ok, (dialog, which) -> dialog.dismiss())
                 .create().show();
     }

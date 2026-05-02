@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="abbrechen">បោះបង់</string>
-    <string name="abc_action_bar_home_description">រកមើល​ទៅ​ដើម</string>
+    <string name="abc_action_bar_home_description">Navigate home</string>
     <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
     <string name="abc_action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
-    <string name="abc_action_bar_up_description">រកមើល​ឡើងលើ</string>
-    <string name="abc_action_menu_overflow_description">ជម្រើស​ច្រើន​ទៀត</string>
-    <string name="abc_action_mode_done">រួចរាល់</string>
-    <string name="abc_activity_chooser_view_see_all">មើល​ទាំងអស់</string>
-    <string name="abc_activitychooserview_choose_application">ជ្រើស​កម្មវិធី​​</string>
-    <string name="abc_capital_off">បិទ</string>
-    <string name="abc_capital_on">បើក</string>
+    <string name="abc_action_bar_up_description">Navigate up</string>
+    <string name="abc_action_menu_overflow_description">More options</string>
+    <string name="abc_action_mode_done">Done</string>
+    <string name="abc_activity_chooser_view_see_all">See all</string>
+    <string name="abc_activitychooserview_choose_application">Choose an app</string>
+    <string name="abc_capital_off">OFF</string>
+    <string name="abc_capital_on">ON</string>
     <string name="abc_font_family_body_1_material">sans-serif</string>
     <string name="abc_font_family_body_2_material">sans-serif-medium</string>
     <string name="abc_font_family_button_material">sans-serif-medium</string>
@@ -23,18 +23,18 @@
     <string name="abc_font_family_menu_material">sans-serif</string>
     <string name="abc_font_family_subhead_material">sans-serif</string>
     <string name="abc_font_family_title_material">sans-serif-medium</string>
-    <string name="abc_search_hint">ស្វែងរក…</string>
-    <string name="abc_searchview_description_clear">សម្អាត​សំណួរ</string>
-    <string name="abc_searchview_description_query">ស្វែងរក​សំណួរ</string>
-    <string name="abc_searchview_description_search">ស្វែងរក</string>
-    <string name="abc_searchview_description_submit">ដាក់​​​ស្នើ​សំណួរ</string>
-    <string name="abc_searchview_description_voice">ការស្វែងរក​សំឡេង</string>
-    <string name="abc_shareactionprovider_share_with">ចែករំលែក​ជាមួយ</string>
-    <string name="abc_shareactionprovider_share_with_application">ចែករំលែក​ជាមួយ %s</string>
-    <string name="abc_toolbar_collapse_description">បង្រួម</string>
-    <string name="about1">An App by Stefan Gaffga (stefan@gaffga.de)</string>
-    <string name="about2">Thanks to Winfried of\nhttp://www.meditationsuhren.de\nfor providing such great Bell Sounds!</string>
-    <string name="about3">If you encounter Problems, please visit the Facebook page:\n\nhttps://www.facebook.com/ZazenMeditationTimer\n</string>
+    <string name="abc_search_hint">Search…</string>
+    <string name="abc_searchview_description_clear">Clear query</string>
+    <string name="abc_searchview_description_query">Search query</string>
+    <string name="abc_searchview_description_search">Search</string>
+    <string name="abc_searchview_description_submit">Submit query</string>
+    <string name="abc_searchview_description_voice">Voice search</string>
+    <string name="abc_shareactionprovider_share_with">Share with</string>
+    <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
+    <string name="abc_toolbar_collapse_description">Collapse</string>
+    <string name="about1">Zazen Meditation Timer — A simple meditation timer with customizable sections, bell sounds, and session management.</string>
+    <string name="about2">Originally created by Stefan Gaffga. Currently maintained by Georg Graf.\n\nThanks to Winfried of &lt;a href="http://www.meditationsuhren.de"&gt;http://www.meditationsuhren.de&lt;/a&gt; for providing such great Bell Sounds!</string>
+    <string name="about3">&lt;a href="https://github.com/georgernstgraf/zazentimer/issues"&gt;Report issues on GitHub&lt;/a&gt;</string>
     <string name="app_description">This application lets the user define a set of meditation sessions and provides a timer with visual and audible feedback when a part or the whole meditation is over.</string>
     <string name="app_name">Zazen Meditation Timer</string>
     <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>

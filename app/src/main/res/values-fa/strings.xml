@@ -32,9 +32,9 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <string name="about1">An App by Stefan Gaffga (stefan@gaffga.de)</string>
-    <string name="about2">Thanks to Winfried of\nhttp://www.meditationsuhren.de\nfor providing such great Bell Sounds!</string>
-    <string name="about3">If you encounter Problems, please visit the Facebook page:\n\nhttps://www.facebook.com/ZazenMeditationTimer\n</string>
+    <string name="about1">Zazen Meditation Timer — A simple meditation timer with customizable sections, bell sounds, and session management.</string>
+    <string name="about2">Originally created by Stefan Gaffga. Currently maintained by Georg Graf.\n\nThanks to Winfried of &lt;a href="http://www.meditationsuhren.de"&gt;http://www.meditationsuhren.de&lt;/a&gt; for providing such great Bell Sounds!</string>
+    <string name="about3">&lt;a href="https://github.com/georgernstgraf/zazentimer/issues"&gt;Report issues on GitHub&lt;/a&gt;</string>
     <string name="app_description">This application lets the user define a set of meditation sessions and provides a timer with visual and audible feedback when a part or the whole meditation is over.</string>
     <string name="app_name">Zazen Meditation Timer</string>
     <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
@@ -161,7 +161,7 @@
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="test_mute_perm_request">برنامه در حال حاضر اجازه ندارد تلفن شما را بی صدا کند.تنظیمات را برای تغییر باز کنید؟</string>
     <string name="text_cant_mute">تلفن شما به این برنامه اجازه نمی دهد آن را بی صدا کند.نادیده گرفتن را در این تنظیمات برنامه‌ها غیرفعال کنید یا در تنظیمات تلفن‌های خود اجازه بی‌صدا کردن را بدهید.</string>
-    <string name="text_no_notify_access_settings">به نظر نمی‌رسد تلفن شما تنظیمات استانداردی برای امکان نادیده گرفتن ندارد.لطفاً به صورت دستی تنظیمات \&quot;دسترسی مزاحم نشوید\&quot; را جستجو کرده و آن را فعال کنید.</string>
+    <string name="text_no_notify_access_settings">به نظر نمی‌رسد تلفن شما تنظیمات استانداردی برای امکان نادیده گرفتن ندارد.لطفاً به صورت دستی تنظیمات \&amp;quot;دسترسی مزاحم نشوید\&amp;quot; را جستجو کرده و آن را فعال کنید.</string>
     <string name="text_no_sections">هیچ بخش تعریف نشده است.</string>
     <string name="text_question_delete_session">آیا واقعاً جلسه انتخاب شده حذف می شود؟</string>
     <string name="theme">موضوع</string>
