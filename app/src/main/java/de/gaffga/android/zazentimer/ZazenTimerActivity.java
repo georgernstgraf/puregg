@@ -310,9 +310,9 @@ public class ZazenTimerActivity extends AppCompatActivity implements MainFragmen
     }
 
     public void showAboutScreen() {
-        String message = "Commit: " + BuildConfig.GIT_HASH + "\n\n"
-                + getString(R.string.about1) + "\n\n"
-                + getString(R.string.about2) + "\n\n"
+        String message = "Commit: " + BuildConfig.GIT_HASH + "<br><br>"
+                + getString(R.string.about1) + "<br><br>"
+                + getString(R.string.about2) + "<br><br>"
                 + getString(R.string.about3);
         TextView textView = new TextView(this);
         textView.setText(Html.fromHtml(message));

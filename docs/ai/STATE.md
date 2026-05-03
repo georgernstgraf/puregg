@@ -1,22 +1,18 @@
 # Project State
 
-Current status as of 2026-05-02.
+Current status as of 2026-05-03.
 
 ## Current Focus
-#85 and #89 completed. App now declares 136 locales via localeConfig. All rare languages covered.
+#90 fixed: About page line breaks restored by replacing `\n` with `<br>` for `Html.fromHtml()`.
 
 ## Completed (this session)
-- [x] #85 localeConfig for Android 13+ per-app language support
-  - Created `res/xml/locales_config.xml` with 128 locales (BCP 47 tags)
-  - Added `values-fil/strings.xml` (copy of `values-tl` for Filipino)
-  - Added `android:localeConfig="@xml/locales_config"` to AndroidManifest.xml
-- [x] #89 Rare language support (sub-issue of #85)
-  - Added 8 languages: Assamese, Kashmiri, Maithili, Dogri, Konkani, Santali, Dhivehi, Tibetan
-  - Updated `retranslate.py` with `MyMemoryTranslator` fallback for 3 languages
-  - Generated all 8 `values-XX/strings.xml` files (187 strings each)
-  - Total locales now: 136
+- [x] #90 Fix missing line breaks on About page
+  - Replaced `"\n\n"` with `"<br><br>"` in `ZazenTimerActivity.showAboutScreen()`
+  - Replaced `\n\n` with `&lt;br&gt;&lt;br&gt;` in `about2` string across 137 locale files + base `strings.xml`
 
 ## Completed (previous sessions)
+- [x] #85 localeConfig for Android 13+ per-app language support
+- [x] #89 Rare language support (sub-issue of #85)
 - [x] #84 MeditationService IdlingResource
 - [x] #83 About page rewrite + retranslate tooling
 - [x] #38 Full UI test plan automation
